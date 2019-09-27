@@ -4,10 +4,13 @@
   TODO: Write the necessary validation middleware for the routes
 */
 const controller = require("./controller");
+const validateInput = require("./middleware/validateInput");
 
 module.exports = app => {
   app.get("/", (req, res) => res.send("NachoNight Authentication API"));
-  app.post("/register", (req, res) => controller.register(req, res));
+  app.post("/register", validateInput, (req, res) =>
+    controller.register(req, res)
+  );
   app.post("/login", (req, res) => controller.login(req, res));
   app.get("/current", (req, res) => controller.current(req, res));
   app.put("/edit", (req, res) => controller.edit(req, res));

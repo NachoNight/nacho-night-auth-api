@@ -1,5 +1,10 @@
 const { expect } = require("chai");
 
 describe("Testing Suite", () => {
-  it("should return 4", () => expect(2 + 2).to.eq(4));
+  describe("Registration", () => {
+    it("should return the user object", async () => {
+      const res; // await API call
+      expect(res.data).to.include.all.keys('email', 'pasword', 'createdAt')
+    });
+  });
 });
