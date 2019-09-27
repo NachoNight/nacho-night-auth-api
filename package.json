@@ -2,7 +2,7 @@
   "name": "nacho-night-auth-api",
   "version": "1.0.0",
   "description": "Auth API",
-  "main": "src/index.js",
+  "main": "app/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
