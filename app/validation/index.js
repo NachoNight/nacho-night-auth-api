@@ -31,7 +31,10 @@ class Validator {
     this.errors = {};
   }
   checkForErrors() {
-    Object.keys(this.errors).length > 0 ? this.errors : false;
+    if (Object.keys(this.errors).length > 0) {
+      return this.errors;
+    }
+    return false;
   }
 }
 
