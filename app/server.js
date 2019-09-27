@@ -1,10 +1,21 @@
 const config = require("./config");
 const applyMiddleware = require("./middleware");
+const database = require("./db");
 
 class Server {
   constructor() {
     this.app = require("express")();
+    this.init();
+  }
+  init() {
+    // Apply middleware
     applyMiddleware(this.app);
+    // Connect and sync the database
+    database
+      .authenticate()
+      .then(() => console.log("Connection with the database established."))
+      .catch(err => this.stop(err));
+    database.sync({ logging: false });
   }
   start() {
     this.app.listen(config.port, err =>
