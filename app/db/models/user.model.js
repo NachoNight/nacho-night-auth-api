@@ -12,12 +12,14 @@ const User = database.define("User", {
     type: Sequelize.BOOLEAN,
     defaultValue: false
   },
-  isBanned: {
+  banned: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
   },
-  createdAt: Sequelize.DATE,
-  defaultValue: Sequelize.NOW
+  createdAt: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW
+  }
 });
 
 module.exports = User;
