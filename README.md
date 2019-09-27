@@ -1,2 +1,1 @@
-# nacho-night-auth-api
-Authentication API
+# NachoNight Authentication API
