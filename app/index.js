@@ -1,5 +1,8 @@
 const app = require("express")();
 const config = require("./config");
+const applyMiddleware = require("./middleware");
+
+applyMiddleware(app);
 
 app.listen(config.port, err =>
   err
