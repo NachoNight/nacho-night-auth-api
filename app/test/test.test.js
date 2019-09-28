@@ -36,7 +36,7 @@ describe('Testing Suite', () => {
       const login = await apiTestingUtility('post', '/login', testingAccount);
       token = login.data.token;
       const res = await apiTestingUtility('get', '/current', null, token);
-      expect(res.data).to.include.all.keys('email', 'id', 'updatedAt', 'created', 'banned');
+      expect(res.data).to.include.all.keys('email', 'id', 'created', 'banned');
     });
   });
   describe('Delete', () => {

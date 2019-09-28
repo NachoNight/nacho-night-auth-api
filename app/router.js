@@ -26,4 +26,10 @@ module.exports = (app) => {
   app.delete('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
     controller.delete(req, res);
   });
+  app.post('/forgot', (req, res) => {
+    controller.forgot(req, res);
+  });
+  app.get('/reset/:token', (req, res) => {
+    controller.reset(req, res);
+  });
 };

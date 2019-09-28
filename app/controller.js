@@ -1,7 +1,10 @@
 const { hashSync } = require('bcrypt');
 const { sign } = require('jsonwebtoken');
+const crypto = require('crypto');
 const { secret } = require('./config');
 const User = require('./db/models/user.model');
+const sendMail = require('./mail');
+const cache = require('./cache');
 
 class Controller {
   async register(req, res) {
@@ -52,8 +55,7 @@ class Controller {
       const payload = {
         email: user.email,
         id: user.id,
-        updatedAt: user.updatedAt,
-        created: user.createdAt,
+        created: user.created,
         banned: user.banned,
       };
       return res.status(200).json(payload);
@@ -71,6 +73,32 @@ class Controller {
     try {
       await User.destroy({ where: { id: req.user.id } });
       return res.status(200).json({ deleted: true, timestamp: Date.now() });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  }
+
+  async forgot(req, res) {
+    try {
+      const user = await User.findOne({ where: { email: req.body.email } });
+      if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
+      const token = await crypto.randomBytes(20).toString('hex');
+      await cache.set(token, user.email);
+      await sendMail(user.email, 'Password Reset', `/reset/${token}`);
+      return res.status(200).json({ initiatedPasswordRecovery: true });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  }
+
+  async reset(req, res) {
+    try {
+      const email = cache.get(req.params.token);
+      const user = await User.findOne({ where: { email } });
+      if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
+      console.log(req.body.password);
+      await user.update({ password: hashSync(req.body.password, 10) });
+      return res.status(200).json(user);
     } catch (error) {
       return res.status(500).json(error);
     }
