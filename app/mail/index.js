@@ -25,14 +25,14 @@ const transport = createTransport({
 });
 
 // TODO: Create templates for different use cases
-module.exports = (to, subject, text) => {
+module.exports = (to, subject, text, template = 'sample') => {
   const config = {
     from: sender,
     to,
     subject,
   };
   ejs.renderFile(
-    path.join(__dirname, '/templates/sample.ejs'),
+    path.join(__dirname, `/templates/${template}.ejs`),
     { ...config, body: text },
     async (err, data) => {
       if (err) throw err;
