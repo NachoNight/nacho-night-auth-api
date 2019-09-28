@@ -31,8 +31,6 @@
 > Example file has been provided. `.env.example`
 
 ```
-SERVER_PORT=
-NODE_ENV=
 DB_NAME=
 DB_USER=
 DB_PASSWORD=
