@@ -1,6 +1,7 @@
 const User = require("./db/models/user.model");
-const generateUserToken = require("./utils/generateUserToken");
 const { hashSync } = require("bcrypt");
+const { sign } = require("jsonwebtoken");
+const { secret } = require("./config");
 
 class Controller {
   async register(req, res) {
@@ -35,12 +36,13 @@ class Controller {
         verified: user.verified,
         createdAt: user.createdAt
       };
-      return res
-        .status(200)
-        .json({
-          loggedIn: true,
-          token: `Bearer ${generateUserToken(payload)}`
-        });
+      const token = sign(payload, secret, {
+        expiresIn: "24h"
+      });
+      return res.status(200).json({
+        loggedIn: true,
+        token: `Bearer ${token}`
+      });
     } catch (error) {
       return res.status(500).json(error);
     }
