@@ -30,7 +30,7 @@ class Controller {
       const user = await User.findOne({ where: { email: req.body.email } });
       if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
       const correctPassword = await compareSync(req.body.password, user.password);
-      if (!correctPassword) return res.status(403).json({ error: 'Incorrect Password' });
+      if (!correctPassword) return res.status(403).json({ error: 'Incorrect Password.' });
       const payload = {
         id: user.id,
         email: user.email,
