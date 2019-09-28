@@ -1,5 +1,16 @@
+/*
+  This module is resposible for sending out emails.
+  Currently, the HTML template is missing, and will be
+  until the template has been discussed. Exported, will be
+  the function which will take in parameters necessary to send
+  out an email.
+
+  Regarding the imports, the mail object within the config file
+  consists of all the required SMTP information we need to
+  run Nodemailer.
+*/
 const { createTransport } = require('nodemailer');
-const { host, port, user, pass } = require('../config').mail;
+const { host, port, user, pass, sender } = require('../config').mail;
 
 const transport = createTransport({
   host,
@@ -12,12 +23,12 @@ const transport = createTransport({
 });
 
 // TODO: Implement a HTML template for emails
-module.exports = async (from, to, subject, text) => {
+module.exports = async (to, subject, text) => {
   await transport.sendMail({
-    from,
+    from: sender,
     to,
     subject,
     text,
   });
-  console.log(`Email sent from ${from} to ${to}`);
+  console.log(`Email sent to ${to}`);
 };
