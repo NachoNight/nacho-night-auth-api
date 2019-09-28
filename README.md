@@ -37,3 +37,13 @@ DB_PASSWORD=
 DB_HOST=
 DB_PORT=
 ```
+
+---
+
+### Todos:
+
+- Run a Postgres Docker instance
+
+- Write a docker-compose file to run the app dockerized
+
+---
