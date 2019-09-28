@@ -4,4 +4,5 @@ const { name, username, password, host, dialect } = require('../config').databas
 module.exports = new Sequelize(name, username, password, {
   host,
   dialect,
+  logging: false,
 });
