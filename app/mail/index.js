@@ -10,6 +10,8 @@
   run Nodemailer.
 */
 const { createTransport } = require('nodemailer');
+const ejs = require('ejs');
+const path = require('path');
 const { host, port, user, pass, sender } = require('../config').mail;
 
 const transport = createTransport({
@@ -22,13 +24,23 @@ const transport = createTransport({
   },
 });
 
-// TODO: Implement a HTML template for emails
-module.exports = async (to, subject, text) => {
-  await transport.sendMail({
+// TODO: Create templates for different use cases
+module.exports = (to, subject, text) => {
+  const config = {
     from: sender,
     to,
     subject,
-    text,
-  });
-  console.log(`Email sent to ${to}`);
+  };
+  ejs.renderFile(
+    path.join(__dirname, '/templates/sample.ejs'),
+    { ...config, body: text },
+    async (err, data) => {
+      if (err) throw err;
+      await transport.sendMail({
+        ...config,
+        html: data,
+      });
+      console.log(`Email sent to ${to}`);
+    },
+  );
 };
