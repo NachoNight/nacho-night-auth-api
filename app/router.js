@@ -29,7 +29,7 @@ module.exports = (app) => {
   app.post('/forgot', validateInput, (req, res) => {
     controller.forgot(req, res);
   });
-  app.get('/reset/:token', (req, res) => {
+  app.get('/reset/:token', validateInput, (req, res) => {
     controller.reset(req, res);
   });
 };
