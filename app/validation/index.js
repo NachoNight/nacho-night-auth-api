@@ -6,6 +6,7 @@ class Validator {
     this.errors = {};
   }
   register(data) {
+    this.resetErrors();
     // Email validation
     if (!isValid(data.email))
       this.errors.emailInvalidInput =
@@ -23,7 +24,7 @@ class Validator {
     if (!isLength(data.password, { min: 8, max: 32 }))
       this.errors.passwordLength =
         "Please provide password between 8 and 32 characters long.";
-    if (data.password !== data.confirmPasword)
+    if (data.password !== data.confirmPassword)
       this.errors.passwordsNotMatching = "The passwords are not matching.";
     return this.checkForErrors();
   }
