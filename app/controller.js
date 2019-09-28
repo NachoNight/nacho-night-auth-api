@@ -96,7 +96,6 @@ class Controller {
       const email = cache.get(req.params.token);
       const user = await User.findOne({ where: { email } });
       if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
-      console.log(req.body.password);
       await user.update({ password: hashSync(req.body.password, 10) });
       return res.status(200).json(user);
     } catch (error) {
