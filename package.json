@@ -1,0 +1,54 @@
+{
+  "name": "nacho-night-auth-api",
+  "version": "1.0.0",
+  "description": "Auth API",
+  "main": "app/index.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon .",
+    "test": "mocha app/test/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NachoNight/nacho-night-auth-api.git"
+  },
+  "keywords": [
+    "NachoNight"
+  ],
+  "author": "NachoNight",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NachoNight/nacho-night-auth-api/issues"
+  },
+  "homepage": "https://github.com/NachoNight/nacho-night-auth-api#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "pg": "^7.12.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.19.1",
+    "validator": "^11.1.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^1.7.0",
+    "mocha": "^6.2.0",
+    "nodemon": "^1.19.2",
+    "prettier": "^1.18.2"
+  }
+}

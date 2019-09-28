@@ -1,0 +1,24 @@
+{
+  "env": {
+    "commonjs": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": ["airbnb-base", "prettier", "airbnb"],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "plugins": ["prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "rules": {
+    "prettier/prettier": ["error"],
+    // These rules are just annoying, so yeah they gone
+    "object-curly-newline": "off",
+    "consistent-return": "off",
+    "class-methods-use-this": "off",
+    "no-console": "off"
+  }
+}
