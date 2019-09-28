@@ -28,6 +28,21 @@ class Validator {
       this.errors.passwordsNotMatching = "The passwords are not matching.";
     return this.checkForErrors();
   }
+  login(data) {
+    this.resetErrors();
+    // Check if the data provided is not empty
+    if (!isValid(data.email))
+      this.errors.emailInvalidInput =
+        "The provided input for the email address is not valid.";
+    if (isEmpty(data.email))
+      this.errors.emailEmpty = "Please provide your email address.";
+    if (!isValid(data.password))
+      this.errors.passwordInputInvalid =
+        "The provided input for the password is not valid.";
+    if (isEmpty(data.password))
+      this.errors.passwordEmpty = "Please provide your password.";
+    return this.checkForErrors();
+  }
   resetErrors() {
     this.errors = {};
   }

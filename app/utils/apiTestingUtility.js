@@ -17,7 +17,6 @@ module.exports = async (method, endpoint, data = null, token = "") => {
       data: res.data
     };
   } catch (error) {
-    console.error(error);
-    throw new Error(error);
+    throw error;
   }
 };

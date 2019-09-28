@@ -1,6 +1,8 @@
 const { expect } = require("chai");
 const apiTestingUtility = require("../utils/apiTestingUtility");
 
+let token;
+
 const testingAccount = {
   email: "testing@account.com",
   password: "test1234",
@@ -31,12 +33,8 @@ describe("Testing Suite", () => {
   describe("Get current user", () => {
     it("should return the non-sensitive user information", async () => {
       const login = await apiTestingUtility("post", "/login", testingAccount);
-      const res = await apiTestingUtility(
-        "get",
-        "/current",
-        null,
-        login.data.token
-      );
+      token = login.data.token;
+      const res = await apiTestingUtility("get", "/current", null, token);
       expect(res.data).to.include.all.keys(
         "email",
         "id",
@@ -48,13 +46,7 @@ describe("Testing Suite", () => {
   });
   describe("Delete", () => {
     it("should return a confirmation and a timestamp of when the user has been deleted", async () => {
-      const login = await apiTestingUtility("post", "/login", testingAccount);
-      const res = await apiTestingUtility(
-        "delete",
-        "/delete",
-        null,
-        login.data.token
-      );
+      const res = await apiTestingUtility("delete", "/delete", null, token);
       expect(res.data).to.include.all.keys("deleted", "timestamp");
     });
   });
