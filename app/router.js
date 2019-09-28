@@ -26,7 +26,7 @@ module.exports = (app) => {
   app.delete('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
     controller.delete(req, res);
   });
-  app.post('/forgot', validateInput, (req, res) => {
+  app.patch('/forgot', validateInput, (req, res) => {
     controller.forgot(req, res);
   });
   app.get('/reset/:token', validateInput, (req, res) => {

@@ -1,4 +1,4 @@
-const { hashSync } = require('bcrypt');
+const { hashSync, compareSync } = require('bcrypt');
 const { sign } = require('jsonwebtoken');
 const crypto = require('crypto');
 const { secret } = require('./config');
@@ -29,6 +29,8 @@ class Controller {
     try {
       const user = await User.findOne({ where: { email: req.body.email } });
       if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
+      const correctPassword = await compareSync(req.body.password, user.password);
+      if (!correctPassword) return res.status(403).json({ error: 'Incorrect Password' });
       const payload = {
         id: user.id,
         email: user.email,
