@@ -1,20 +1,23 @@
-const { Strategy, ExtractJwt } = require("passport-jwt");
-const { secret } = require("../config");
-const User = require("../db/models/user.model");
+const { Strategy, ExtractJwt } = require('passport-jwt');
+const { secret } = require('../config');
+const User = require('../db/models/user.model');
 
 const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: secret
+  secretOrKey: secret,
 };
 
-module.exports = passport =>
+module.exports = (passport) => {
   passport.use(
-    new Strategy(opts, async (jwt_payload, done) => {
+    // eslint-disable-next-line consistent-return
+    new Strategy(opts, async (jwtPayload, done) => {
       try {
-        const user = await User.findOne({ where: { id: jwt_payload.id } });
-        user ? done(null, user) : done("User not found", false);
+        const user = await User.findOne({ where: { id: jwtPayload.id } });
+        if (!user) return done('User not found.', false);
+        return done(null, user);
       } catch (error) {
         done(error, false);
       }
-    })
+    }),
   );
+};

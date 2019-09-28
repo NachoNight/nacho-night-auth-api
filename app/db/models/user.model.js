@@ -1,25 +1,25 @@
-const Sequelize = require("sequelize");
-const database = require("../");
+const Sequelize = require('sequelize');
+const database = require('../');
 
-const User = database.define("User", {
+const User = database.define('User', {
   email: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
   },
   password: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
   },
   verified: {
     type: Sequelize.BOOLEAN,
-    defaultValue: false
+    defaultValue: false,
   },
   banned: {
     type: Sequelize.BOOLEAN,
-    defaultValue: false
+    defaultValue: false,
   },
-  createdAt: {
+  created: {
     type: Sequelize.DATE,
-    defaultValue: Sequelize.NOW
-  }
+    defaultValue: Sequelize.NOW,
+  },
 });
 
 module.exports = User;

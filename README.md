@@ -1,16 +1,16 @@
 # NachoNight Authentication API
 
-> Please remember to run `npm install` to install all the necessary dependencies.
-
 ---
 
 ### Requirements:
 
-- Node.js(v.10.16.3 or higher)
+> Development:
 
-- Docker
+- Node.js (v.10.16.3)
 
-- Postgres
+- Docker (v.19.03.2)
+
+- Postgres (v.11.5)
 
 ---
 
@@ -36,15 +36,14 @@ DB_USER=
 DB_PASSWORD=
 DB_HOST=
 DB_PORT=
-SECRET_OR_KEY=
+DB_DIALECT
+SECRET=
 ```
 
 ---
 
 ### Todos:
 
-- Run a Postgres Docker instance
+- [ ] Run a Postgres Docker instance
 
-- Write a docker-compose file to run the app dockerized
-
----
+- [ ] Write a docker-compose file to run the app dockerized
