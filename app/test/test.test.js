@@ -22,4 +22,10 @@ describe("Testing Suite", () => {
       );
     });
   });
+  describe("Login", () => {
+    it("should return a token", async () => {
+      const res = await apiTestingUtility("post", "/login", testingAccount);
+      expect(res.data).to.include.all.keys("loggedIn", "token");
+    });
+  });
 });

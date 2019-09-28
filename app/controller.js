@@ -1,4 +1,5 @@
 const User = require("./db/models/user.model");
+const generateUserToken = require("./utils/generateUserToken");
 const { hashSync } = require("bcrypt");
 
 class Controller {
@@ -20,8 +21,29 @@ class Controller {
       return res.status(500).json(error);
     }
   }
-  login(req, res) {
+  async login(req, res) {
     // Log an user in
+    try {
+      const user = await User.findOne({ where: { email: req.body.email } });
+      if (!user)
+        return res
+          .status(404)
+          .json({ error: "This email address is not in use." });
+      const payload = {
+        id: user.id,
+        email: user.email,
+        verified: user.verified,
+        createdAt: user.createdAt
+      };
+      return res
+        .status(200)
+        .json({
+          loggedIn: true,
+          token: `Bearer ${generateUserToken(payload)}`
+        });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
   }
   current(req, res) {
     // Get the data of the user
