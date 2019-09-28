@@ -68,8 +68,14 @@ class Controller {
   //   // TODO: Implement this method once the mailing system is in place
   //   // Edit the account of the user
   // }
-  delete(req, res) {
+  async delete(req, res) {
     // Delete the account
+    try {
+      await User.destroy({ where: { id: req.user.id } });
+      return res.status(200).json({ deleted: true, timestamp: Date.now() });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
   }
 }
 

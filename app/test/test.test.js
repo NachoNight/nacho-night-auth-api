@@ -30,8 +30,13 @@ describe("Testing Suite", () => {
   });
   describe("Get current user", () => {
     it("should return the non-sensitive user information", async () => {
-      const token = await apiTestingUtility("post", "/login", testingAccount);
-      const res = await apiTestingUtility("get", "/login", null, token);
+      const login = await apiTestingUtility("post", "/login", testingAccount);
+      const res = await apiTestingUtility(
+        "get",
+        "/current",
+        null,
+        login.data.token
+      );
       expect(res.data).to.include.all.keys(
         "email",
         "id",
@@ -39,6 +44,18 @@ describe("Testing Suite", () => {
         "createdAt",
         "banned"
       );
+    });
+  });
+  describe("Delete", () => {
+    it("should return a confirmation and a timestamp of when the user has been deleted", async () => {
+      const login = await apiTestingUtility("post", "/login", testingAccount);
+      const res = await apiTestingUtility(
+        "delete",
+        "/delete",
+        null,
+        login.data.token
+      );
+      expect(res.data).to.include.all.keys("deleted", "timestamp");
     });
   });
 });

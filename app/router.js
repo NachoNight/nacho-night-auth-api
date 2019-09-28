@@ -19,5 +19,9 @@ module.exports = app => {
     (req, res) => controller.current(req, res)
   );
   // app.put("/edit", (req, res) => controller.edit(req, res));
-  app.delete("/delete", (req, res) => controller.delete(req, res));
+  app.delete(
+    "/delete",
+    passport.authenticate("jwt", { session: false }),
+    (req, res) => controller.delete(req, res)
+  );
 };
