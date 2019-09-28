@@ -96,6 +96,7 @@ class Controller {
   async reset(req, res) {
     try {
       const email = cache.get(req.params.token);
+      if (email === undefined) return res.status(500).json({ error: 'An error has occured.' });
       const user = await User.findOne({ where: { email } });
       if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
       await user.update({ password: hashSync(req.body.password, 10) });
