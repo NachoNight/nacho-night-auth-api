@@ -47,12 +47,27 @@ class Controller {
       return res.status(500).json(error);
     }
   }
-  current(req, res) {
+  async current(req, res) {
     // Get the data of the user
+    try {
+      const user = await User.findOne({ where: { id: req.user.id } });
+      if (!user) return res.status(404).json({ error: "User not found." });
+      const payload = {
+        email: user.email,
+        id: user.id,
+        updatedAt: user.updatedAt,
+        createdAt: user.createdAt,
+        banned: user.banned
+      };
+      return res.status(200).json(payload);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
   }
-  edit(req, res) {
-    // Edit the account of the user
-  }
+  // edit(req, res) {
+  //   // TODO: Implement this method once the mailing system is in place
+  //   // Edit the account of the user
+  // }
   delete(req, res) {
     // Delete the account
   }

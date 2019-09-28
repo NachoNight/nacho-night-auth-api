@@ -5,6 +5,7 @@
 */
 const controller = require("./controller");
 const validateInput = require("./middleware/validateInput");
+const passport = require("passport");
 
 module.exports = app => {
   app.get("/", (req, res) => res.send("NachoNight Authentication API"));
@@ -12,7 +13,11 @@ module.exports = app => {
     controller.register(req, res)
   );
   app.post("/login", (req, res) => controller.login(req, res));
-  app.get("/current", (req, res) => controller.current(req, res));
-  app.put("/edit", (req, res) => controller.edit(req, res));
+  app.get(
+    "/current",
+    passport.authenticate("jwt", { session: false }),
+    (req, res) => controller.current(req, res)
+  );
+  // app.put("/edit", (req, res) => controller.edit(req, res));
   app.delete("/delete", (req, res) => controller.delete(req, res));
 };
