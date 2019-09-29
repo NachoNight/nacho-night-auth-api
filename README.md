@@ -51,4 +51,8 @@ SECRET=
 
 - [ ] Run a Postgres Docker instance
 
-- [ ] Write a docker-compose file to run the app dockerized
+- [ ] Write a docker-compose file to run the app in a dockerized environment
+
+- [ ] Change authentication system from JWT to OAuth
+
+- [ ] Refactor the code going against the DRY principle
