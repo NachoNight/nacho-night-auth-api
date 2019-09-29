@@ -87,7 +87,7 @@ class Controller {
       const response = `${
         environment === 'production' ? `https://${req.hostname}` : `http://localhost:${port}`
       }/recover/${token}`;
-      await sendMail(user.email, 'Password Recovery', response);
+      sendMail(user.email, 'Password Recovery', response);
       return res.status(200).json({ initiatedPasswordRecovery: true });
     } catch (error) {
       return res.status(500).json(error);
@@ -112,8 +112,8 @@ class Controller {
   async changeEmail(req, res) {
     // Send out a token to verify an email change
     try {
-      const user = await User.findOne({ where: { email: req.user.email } });
-      if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
+      const user = await User.findOne({ where: { id: req.user.id } });
+      if (!user) return res.status(404).json({ error: 'User not found.' });
       const token = await crypto.randomBytes(20).toString('hex');
       await cache.set(
         token,
@@ -122,7 +122,7 @@ class Controller {
       const response = `${
         environment === 'production' ? `https://${req.hostname}` : `http://localhost:${port}`
       }/verify/${token}`;
-      await sendMail(user.email, 'Email Change', response);
+      sendMail(req.body.email, 'Email Change', response);
       return res.status(200).json({ initiatedEmailChange: true });
     } catch (error) {
       return res.status(500).json(error);
@@ -130,6 +130,7 @@ class Controller {
   }
 
   async verifyEmail(req, res) {
+    // TODO: Discuss -> Render a view or redirect the user?
     // Verify the email change
     try {
       const data = JSON.parse(cache.get(req.params.token));
@@ -140,6 +141,23 @@ class Controller {
       if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
       await user.update({ email: data.newEmail });
       cache.del(req.params.token);
+      return res.status(200).json(user);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  }
+
+  async changePassword(req, res) {
+    // Change the password of an user
+    try {
+      const user = await User.findOne({ where: { id: req.user.id } });
+      if (!user) return res.status(404).json({ error: 'User not found.' });
+      await user.update({ password: hashSync(req.body.password, 10) });
+      sendMail(
+        user.email,
+        'Password Changed Notice',
+        'We want to let you know that your password has been changed.',
+      );
       return res.status(200).json(user);
     } catch (error) {
       return res.status(500).json(error);

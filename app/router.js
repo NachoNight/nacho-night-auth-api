@@ -38,4 +38,7 @@ module.exports = (app) => {
   app.get('/verify/:token', (req, res) => {
     controller.verifyEmail(req, res);
   });
+  app.put('/change-password', passport.authenticate('jwt', { session: false }), (req, res) => {
+    controller.changePassword(req, res);
+  });
 };
