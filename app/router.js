@@ -19,10 +19,6 @@ module.exports = (app) => {
   app.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
     controller.current(req, res);
   });
-  /* TODO: Implement this endpoint once the mail system is in place
-    app.put("/edit", passport.authenticate("jwt", { session: false }),
-    validateInput, (req, res) => controller.edit(req, res));
-  */
   app.delete('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
     controller.delete(req, res);
   });
@@ -31,5 +27,11 @@ module.exports = (app) => {
   });
   app.get('/reset/:token', validateInput, (req, res) => {
     controller.reset(req, res);
+  });
+  app.put('/change-email', passport.authenticate('jwt', { session: false }), (req, res) => {
+    controller.changeEmail(req, res);
+  });
+  app.get('/verify/:token', (req, res) => {
+    controller.verifyEmail(req, res);
   });
 };

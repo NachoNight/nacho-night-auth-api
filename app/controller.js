@@ -5,6 +5,7 @@ const { secret } = require('./config');
 const User = require('./db/models/user.model');
 const sendMail = require('./mail');
 const cache = require('./cache');
+const { environment, port } = require('./config');
 
 class Controller {
   async register(req, res) {
@@ -66,10 +67,6 @@ class Controller {
     }
   }
 
-  // edit(req, res) {
-  //   // TODO: Implement this method once the mailing system is in place
-  //   // Edit the account of the user
-  // }
   async delete(req, res) {
     // Delete the account
     try {
@@ -81,12 +78,16 @@ class Controller {
   }
 
   async forgot(req, res) {
+    // Send out an email with a token for password recovery
     try {
       const user = await User.findOne({ where: { email: req.body.email } });
       if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
       const token = await crypto.randomBytes(20).toString('hex');
       await cache.set(token, user.email);
-      await sendMail(user.email, 'Password Reset', `/reset/${token}`);
+      const response = `${
+        environment === 'production' ? `https://${req.hostname}` : `http://localhost:${port}`
+      }/reset/${token}`;
+      await sendMail(user.email, 'Password Reset', response);
       return res.status(200).json({ initiatedPasswordRecovery: true });
     } catch (error) {
       return res.status(500).json(error);
@@ -94,12 +95,48 @@ class Controller {
   }
 
   async reset(req, res) {
+    // Reset passwords
     try {
       const email = cache.get(req.params.token);
       if (email === undefined) return res.status(500).json({ error: 'An error has occured.' });
       const user = await User.findOne({ where: { email } });
       if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
       await user.update({ password: hashSync(req.body.password, 10) });
+      return res.status(200).json(user);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  }
+
+  async changeEmail(req, res) {
+    // Send out a token to verify an email change
+    try {
+      const user = await User.findOne({ where: { email: req.user.email } });
+      if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
+      const token = await crypto.randomBytes(20).toString('hex');
+      await cache.set(
+        token,
+        JSON.stringify({ currentEmail: user.email, newEmail: req.body.email }),
+      );
+      const response = `${
+        environment === 'production' ? `https://${req.hostname}` : `http://localhost:${port}`
+      }/verify/${token}`;
+      await sendMail(user.email, 'Email Change', response);
+      return res.status(200).json({ initiatedEmailChange: true });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  }
+
+  async verifyEmail(req, res) {
+    try {
+      const data = JSON.parse(cache.get(req.params.token));
+      if (data === {} || data === undefined) {
+        return res.status(500).json({ error: 'An error has occured.' });
+      }
+      const user = await User.findOne({ where: { email: data.currentEmail } });
+      if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
+      await user.update({ email: data.newEmail });
       return res.status(200).json(user);
     } catch (error) {
       return res.status(500).json(error);
