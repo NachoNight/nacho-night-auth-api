@@ -7,11 +7,14 @@ const controller = require('./controller');
 const validateInput = require('./middleware/validateInput');
 
 module.exports = (app) => {
-  app.get('/', (req, res) => {
+  app.get('/', (_, res) => {
     res.send('NachoNight Authentication API');
   });
   app.post('/register', validateInput, (req, res) => {
     controller.register(req, res);
+  });
+  app.get('/verify-account/:token', (req, res) => {
+    controller.verifyAccount(req, res);
   });
   app.post('/login', validateInput, (req, res) => {
     controller.login(req, res);
@@ -25,18 +28,14 @@ module.exports = (app) => {
   app.patch('/forgot', validateInput, (req, res) => {
     controller.forgot(req, res);
   });
-  // TODO: Add a GET request to render a view for handling the password recovery.
-  // app.get('/reset/:token', validateInput, (req, res) => {
-  //   renderResetView?(req, res);
-  // });
   app.patch('/recover/:token', validateInput, (req, res) => {
     controller.recover(req, res);
   });
   app.put('/change-email', passport.authenticate('jwt', { session: false }), (req, res) => {
     controller.changeEmail(req, res);
   });
-  app.get('/verify/:token', (req, res) => {
-    controller.verifyEmail(req, res);
+  app.get('/verify-email-change/:token', (req, res) => {
+    controller.verifyEmailChange(req, res);
   });
   app.put('/change-password', passport.authenticate('jwt', { session: false }), (req, res) => {
     controller.changePassword(req, res);

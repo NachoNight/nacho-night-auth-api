@@ -36,11 +36,19 @@ module.exports = (to, subject, text, template = 'sample') => {
     { ...config, body: text },
     async (err, data) => {
       if (err) throw err;
-      await transport.sendMail({
-        ...config,
-        html: data,
-      });
-      console.log(`Email sent to ${to}`);
+      await transport.sendMail(
+        {
+          ...config,
+          html: data,
+        },
+        (error) => {
+          if (error) {
+            console.error(`Email could not be sent to ${to}`);
+          } else {
+            console.log(`Email sent to ${to}`);
+          }
+        },
+      );
     },
   );
 };
