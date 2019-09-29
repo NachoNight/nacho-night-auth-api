@@ -103,6 +103,11 @@ class Controller {
       if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
       await user.update({ password: hashSync(req.body.password, 10) });
       cache.del(req.params.token);
+      sendMail(
+        user.email,
+        'Password Changed Notice',
+        'We want to let you know that your password has been changed.',
+      );
       return res.status(200).json(user);
     } catch (error) {
       return res.status(500).json(error);
