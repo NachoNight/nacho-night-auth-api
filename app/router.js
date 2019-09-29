@@ -25,8 +25,12 @@ module.exports = (app) => {
   app.patch('/forgot', validateInput, (req, res) => {
     controller.forgot(req, res);
   });
-  app.get('/reset/:token', validateInput, (req, res) => {
-    controller.reset(req, res);
+  // TODO: Add a GET request to render a view for handling the password recovery.
+  // app.get('/reset/:token', validateInput, (req, res) => {
+  //   renderResetView?(req, res);
+  // });
+  app.patch('/recover/:token', validateInput, (req, res) => {
+    controller.recover(req, res);
   });
   app.put('/change-email', passport.authenticate('jwt', { session: false }), (req, res) => {
     controller.changeEmail(req, res);

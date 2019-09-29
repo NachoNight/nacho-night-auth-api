@@ -86,22 +86,23 @@ class Controller {
       await cache.set(token, user.email);
       const response = `${
         environment === 'production' ? `https://${req.hostname}` : `http://localhost:${port}`
-      }/reset/${token}`;
-      await sendMail(user.email, 'Password Reset', response);
+      }/recover/${token}`;
+      await sendMail(user.email, 'Password Recovery', response);
       return res.status(200).json({ initiatedPasswordRecovery: true });
     } catch (error) {
       return res.status(500).json(error);
     }
   }
 
-  async reset(req, res) {
-    // Reset passwords
+  async recover(req, res) {
+    // Recover the password
     try {
       const email = cache.get(req.params.token);
       if (email === undefined) return res.status(500).json({ error: 'An error has occured.' });
       const user = await User.findOne({ where: { email } });
       if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
       await user.update({ password: hashSync(req.body.password, 10) });
+      cache.del(req.params.token);
       return res.status(200).json(user);
     } catch (error) {
       return res.status(500).json(error);
@@ -129,6 +130,7 @@ class Controller {
   }
 
   async verifyEmail(req, res) {
+    // Verify the email change
     try {
       const data = JSON.parse(cache.get(req.params.token));
       if (data === {} || data === undefined) {
@@ -137,6 +139,7 @@ class Controller {
       const user = await User.findOne({ where: { email: data.currentEmail } });
       if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
       await user.update({ email: data.newEmail });
+      cache.del(req.params.token);
       return res.status(200).json(user);
     } catch (error) {
       return res.status(500).json(error);
