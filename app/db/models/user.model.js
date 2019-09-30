@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const uuid = require('uuid/v4');
 const database = require('../');
 
 const User = database.define('User', {
@@ -20,6 +21,10 @@ const User = database.define('User', {
   created: {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW,
+  },
+  clientID: {
+    type: Sequelize.STRING,
+    defaultValue: uuid(),
   },
 });
 

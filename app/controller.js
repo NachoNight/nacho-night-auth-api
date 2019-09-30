@@ -1,7 +1,7 @@
 const { hashSync, compareSync } = require('bcrypt');
 const { sign, verify } = require('jsonwebtoken');
 const crypto = require('crypto');
-const { environment, port, secret } = require('./config');
+const { environment, port, secret } = require('./config').server;
 const User = require('./db/models/user.model');
 const sendMail = require('./mail');
 const cache = require('./cache');

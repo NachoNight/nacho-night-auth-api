@@ -1,6 +1,8 @@
 const express = require('express');
 const config = require('./config');
 const applyMiddleware = require('./middleware');
+const authSystem = require('./auth');
+const initRouter = require('./router');
 const database = require('./db');
 
 class Server {
@@ -12,6 +14,10 @@ class Server {
   init() {
     // Apply middleware
     applyMiddleware(this.app);
+    // Start authentication system
+    authSystem(this.app);
+    // Initialize router
+    initRouter(this.app);
     // Connect and sync the database
     database
       .authenticate()
@@ -21,12 +27,12 @@ class Server {
   }
 
   start() {
-    this.app.listen(config.port, (err) => {
+    this.app.listen(config.server.port, (err) => {
       if (err) {
         this.stop(err);
       }
       console.log(
-        `Server is running.\nhttp://localhost${config.port}/\nEnvironment: ${config.environment}`,
+        `Server is running.\nhttp://localhost:${config.server.port}/\nEnvironment: ${config.server.environment}`,
       );
     });
   }

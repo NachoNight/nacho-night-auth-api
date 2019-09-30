@@ -3,7 +3,7 @@
   for testing the API endpoints.
 */
 const axios = require('axios');
-const { port } = require('../config');
+const { port } = require('../config').server;
 
 module.exports = async (method, endpoint, data = null, token = '') => {
   axios.defaults.headers.common.Authorization = token;

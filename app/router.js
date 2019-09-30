@@ -40,4 +40,19 @@ module.exports = (app) => {
   app.put('/change-password', passport.authenticate('jwt', { session: false }), (req, res) => {
     controller.changePassword(req, res);
   });
+  app.get(
+    '/auth/google',
+    passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }),
+    (_, res) => {
+      res.send('Google OAuth');
+    },
+  );
+  // Temp
+  app.get(
+    '/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    (_, res) => {
+      res.send('Logged in.');
+    },
+  );
 };
