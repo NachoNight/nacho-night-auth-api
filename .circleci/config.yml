@@ -1,0 +1,60 @@
+version: 2
+jobs:
+  install:
+    docker:
+    - image: circleci/node:10.16.3
+    steps:
+    - checkout
+    - restore_cache:
+        keys:
+        - npm-dependencies-{{ checksum "package-lock.json" }}
+        - npm-dependencies-
+    - run:
+        name: Install npm packages
+        command: npm i
+    - save_cache:
+        key: npm-dependencies-{{ checksum "package-lock.json" }}
+        paths:
+        - ./node_modules
+  test:
+    docker:
+    - image: circleci/node:10.16.3
+    - image: circleci/postgres:9.6-alpine-ram
+      environment:
+        POSTGRES_USER: circleci
+        POSTGRES_DB: nachonight
+    steps:
+    - checkout
+    - restore_cache:
+        keys:
+        - npm-dependencies-{{ checksum "package-lock.json" }}
+        - npm-dependencies-
+    - run:
+        name: Copy test configuration
+        command: cp .circleci/.env.cci .env
+    - run:
+        name: Install dockerize
+        command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+        environment:
+          DOCKERIZE_VERSION: v0.3.0
+    - run:
+        name: Wait for db
+        command: dockerize -wait tcp://localhost:5432 -timeout 1m
+    - run:
+        name: Run dev server
+        command: npm run dev
+        background: true
+    - run:
+        name: Wait for dev server
+        command: dockerize -wait tcp://localhost:5000 -timeout 1m
+    - run:
+        name: Run tests
+        command: npm test
+workflows:
+  version: 2
+  install_and_test:
+    jobs:
+    - install
+    - test:
+        requires:
+        - install
