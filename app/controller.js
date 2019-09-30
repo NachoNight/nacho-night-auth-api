@@ -43,7 +43,7 @@ class Controller {
         created: user.createdAt,
       };
       const token = sign(payload, secret, {
-        expiresIn: '24h',
+        expiresIn: 3600,
       });
       return res.status(200).json({
         loggedIn: true,
