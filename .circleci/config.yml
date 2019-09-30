@@ -41,6 +41,13 @@ jobs:
         name: Wait for db
         command: dockerize -wait tcp://localhost:5432 -timeout 1m
     - run:
+        name: Run dev server
+        command: npm run dev
+        background: true
+    - run:
+        name: Wait for dev server
+        command: dockerize -wait tcp://localhost:5000 -timeout 1m
+    - run:
         name: Run tests
         command: npm test
 workflows:
