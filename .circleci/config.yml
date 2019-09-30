@@ -2,7 +2,7 @@ version: 2
 jobs:
   install:
     docker:
-    - image: circleci/node:lts
+    - image: circleci/node:10.16.3
     steps:
     - checkout
     - restore_cache:
@@ -18,7 +18,7 @@ jobs:
         - ./node_modules
   test:
     docker:
-    - image: circleci/node:lts
+    - image: circleci/node:10.16.3
     - image: circleci/postgres:9.6-alpine-ram
       environment:
         POSTGRES_USER: circleci
