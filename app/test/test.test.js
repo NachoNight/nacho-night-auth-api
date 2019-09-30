@@ -5,7 +5,7 @@ const apiTestingUtility = require('../utils/apiTestingUtility');
 let token;
 
 const testingAccount = {
-  email: 'testing@account.com',
+  email: 'nachonight.testing@gmail.com',
   password: 'test12345',
   confirmPassword: 'test12345',
 };
@@ -36,7 +36,26 @@ describe('Testing Suite', () => {
       const login = await apiTestingUtility('post', '/login', testingAccount);
       token = login.data.token;
       const res = await apiTestingUtility('get', '/current', null, token);
-      expect(res.data).to.include.all.keys('email', 'id', 'updatedAt', 'created', 'banned');
+      expect(res.data).to.include.all.keys('email', 'id', 'created', 'banned');
+    });
+  });
+  describe('Change password', () => {
+    it('should return the updated user object', async () => {
+      const res = await apiTestingUtility(
+        'put',
+        '/change-password',
+        { password: '12345test' },
+        token,
+      );
+      expect(res.data).to.include.all.keys(
+        'email',
+        'password',
+        'id',
+        'updatedAt',
+        'created',
+        'verified',
+        'banned',
+      );
     });
   });
   describe('Delete', () => {

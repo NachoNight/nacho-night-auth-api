@@ -35,8 +35,12 @@ DB_NAME=
 DB_USER=
 DB_PASSWORD=
 DB_HOST=
-DB_PORT=
-DB_DIALECT
+DB_DIALECT=
+SMTP_HOSTNAME=
+MAIL_PORT=
+MAIL_USER=
+MAIL_PASSWORD=
+MAIL_SENDER=
 SECRET=
 ```
 
@@ -46,4 +50,10 @@ SECRET=
 
 - [ ] Run a Postgres Docker instance
 
-- [ ] Write a docker-compose file to run the app dockerized
+- [ ] Write a docker-compose file to run the app in a dockerized environment
+
+- [ ] Ensure mailhog is included in this future docker-compose file.
+
+- [ ] Change authentication system from JWT to OAuth
+
+- [ ] Refactor the code going against the DRY principle
