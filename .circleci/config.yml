@@ -27,8 +27,8 @@ jobs:
     - checkout
     - restore_cache:
         keys:
-        - v1-dependencies-{{ checksum "package-lock.json" }}
-        - v1-dependencies-
+        - npm-dependencies-{{ checksum "package-lock.json" }}
+        - npm-dependencies-
     - run:
         name: Copy test configuration
         command: cp .circleci/.env.cci .env
