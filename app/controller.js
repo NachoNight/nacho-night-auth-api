@@ -14,7 +14,7 @@ class Controller {
       if (user) return res.status(403).json({ error: 'This email address is already in use.' });
       const newUser = await User.create({
         email: req.body.email,
-        password: hashSync(req.body.password, 10),
+        password: hashSync(req.body.password, 14),
       });
       console.log(`${newUser.email} has registered.`);
       const token = sign({ email: newUser.email }, secret, { expiresIn: '24h' });
@@ -121,7 +121,7 @@ class Controller {
       if (email === undefined) return res.status(500).json({ error: 'An error has occured.' });
       const user = await User.findOne({ where: { email } });
       if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
-      await user.update({ password: hashSync(req.body.password, 10) });
+      await user.update({ password: hashSync(req.body.password, 14) });
       cache.del(req.params.token);
       sendMail(
         user.email,
@@ -180,7 +180,7 @@ class Controller {
       const user = await User.findOne({ where: { id: req.user.id } });
       if (!user) return res.status(404).json({ error: 'User not found.' });
       if (user.banned) return res.status(403).json({ error: 'You have been banned.' });
-      await user.update({ password: hashSync(req.body.password, 10) });
+      await user.update({ password: hashSync(req.body.password, 14) });
       sendMail(
         user.email,
         'Password Changed Notice',

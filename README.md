@@ -53,6 +53,8 @@ SECRET=
 
 - [ ] Write a docker-compose file to run the app in a dockerized environment
 
+- [ ] Ensure mailhog is included in this future docker-compose file.
+
 - [ ] Change authentication system from JWT to OAuth
 
 - [ ] Refactor the code going against the DRY principle
