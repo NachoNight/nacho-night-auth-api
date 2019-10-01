@@ -67,11 +67,17 @@ module.exports = (app) => {
   );
   app.get(
     '/auth/google',
-    passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }),
+    passport.authenticate('google', {
+      session: false,
+      scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email',
+      ],
+    }),
   );
   app.get(
     '/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login' }),
+    passport.authenticate('google', { failureRedirect: '/login', session: false }),
     (_, res) => {
       // Temporary
       res.send('Google OAuth - Logged in!');

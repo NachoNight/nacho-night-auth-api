@@ -15,7 +15,7 @@ module.exports = (passport) => {
           if (!user) return done('User not found.', false);
           return done(null, user);
         } catch (error) {
-          done(error, false);
+          return done(error, false);
         }
       },
     ),
