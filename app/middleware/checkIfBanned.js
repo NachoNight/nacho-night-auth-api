@@ -9,6 +9,6 @@ module.exports = async (req, res, next) => {
     if (user.banned) return res.status(403).json({ error: 'You are banned.' });
     next();
   } catch (error) {
-    return req.status(500).json(error);
+    return res.status(500).json(error);
   }
 };
