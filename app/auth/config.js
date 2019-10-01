@@ -1,7 +1,7 @@
 const jwtStrategy = require('./strategies/jwt');
 const googleStrategy = require('./strategies/google');
-const twitterStrategy = require('./strategies/twitter');
 const discordStrategy = require('./strategies/discord');
+// const twitterStrategy = require('./strategies/twitter');
 // const facebookStrategy = require('./strategies/facebook');
 
 module.exports = (passport, refresh) => {
@@ -9,7 +9,7 @@ module.exports = (passport, refresh) => {
   passport.deserializeUser((obj, cb) => cb(null, obj));
   jwtStrategy(passport);
   googleStrategy(passport, refresh);
-  twitterStrategy(passport);
   discordStrategy(passport, refresh);
+  // twitterStrategy(passport);
   // facebookStrategy(passport);
 };
