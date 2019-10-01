@@ -18,10 +18,17 @@ module.exports = (passport) => {
           if (user) {
             return done(null, user);
           }
-          registerUser(profile.emails[0].value, randomBytes(32).toString('hex'), (err, user) => {
-            if (err) done(err, false);
-            return done(null, user);
-          });
+          registerUser(
+            profile.emails[0].value,
+            randomBytes(32).toString('hex'),
+            (err, user) => {
+              if (err) {
+                return done(err, false);
+              }
+              return done(null, user);
+            },
+            profile.id,
+          );
         } catch (error) {
           return done(error, false);
         }
