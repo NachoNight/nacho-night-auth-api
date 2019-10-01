@@ -8,16 +8,16 @@
   index.js file contained in the same folder
 */
 const morgan = require('morgan');
-const fs = require('fs');
-const path = require('path');
+const { createWriteStream, existsSync, mkdirSync } = require('fs');
+const { join, resolve } = require('path');
 
 module.exports = (app) => {
-  const folderPath = path.resolve(__dirname, '../logs');
+  const folderPath = resolve(__dirname, '../logs');
   // Create the logs folder if it does not exist
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath);
+  if (!existsSync(folderPath)) {
+    mkdirSync(folderPath);
   }
-  const stream = fs.createWriteStream(path.join(folderPath, 'access.log'), {
+  const stream = createWriteStream(join(folderPath, 'access.log'), {
     flags: 'a',
   });
   app.use(

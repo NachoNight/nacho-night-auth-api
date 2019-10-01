@@ -1,5 +1,5 @@
-const User = require('../db/models/user.model');
 const { hashSync } = require('bcrypt');
+const User = require('../db/models/user.model');
 
 module.exports = async (email, password, callback, clientID = false) => {
   try {

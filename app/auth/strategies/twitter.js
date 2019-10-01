@@ -2,7 +2,7 @@ const { Strategy } = require('passport-twitter');
 const { consumerKey, consumerSecret } = require('../../config').oauth.twitter;
 const User = require('../../db/models/user.model');
 const registerUser = require('../../functions/registerUser');
-const { randomBytes } = require('crypto');
+const generateRandomBytes = require('../../functions/generateRandomBytes');
 
 module.exports = (passport) => {
   passport.use(
@@ -20,12 +20,12 @@ module.exports = (passport) => {
           }
           registerUser(
             profile.emails[0].value,
-            randomBytes(32).toString('hex'),
-            (err, user) => {
+            generateRandomBytes(),
+            (err, account) => {
               if (err) {
                 return done(err, false);
               }
-              return done(null, user);
+              return done(null, account);
             },
             profile.id,
           );

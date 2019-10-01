@@ -10,8 +10,8 @@
   run Nodemailer.
 */
 const { createTransport } = require('nodemailer');
-const ejs = require('ejs');
-const path = require('path');
+const { renderFile } = require('ejs');
+const { join } = require('path');
 const { host, port, user, pass, sender } = require('../config').mail;
 
 const transport = createTransport({
@@ -31,8 +31,8 @@ module.exports = (to, subject, text, template = 'sample') => {
     to,
     subject,
   };
-  ejs.renderFile(
-    path.join(__dirname, `/templates/${template}.ejs`),
+  renderFile(
+    join(__dirname, `/templates/${template}.ejs`),
     { ...config, body: text },
     async (err, data) => {
       if (err) throw err;

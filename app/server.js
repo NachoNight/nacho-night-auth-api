@@ -3,7 +3,7 @@ const config = require('./config');
 const applyMiddleware = require('./middleware');
 const authSystem = require('./auth');
 const initRouter = require('./router');
-const database = require('./db');
+const { authenticate, sync } = require('./db');
 
 class Server {
   constructor() {
@@ -19,11 +19,10 @@ class Server {
     // Initialize router
     initRouter(this.app);
     // Connect and sync the database
-    database
-      .authenticate()
+    authenticate()
       .then(() => console.log('Connection with the database established.'))
       .catch((err) => this.stop(err));
-    database.sync({ logging: false });
+    sync({ logging: false });
   }
 
   start() {

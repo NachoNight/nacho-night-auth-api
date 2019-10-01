@@ -1,12 +1,12 @@
 const { hashSync, compareSync } = require('bcrypt');
 const { verify } = require('jsonwebtoken');
-const { randomBytes } = require('crypto');
 const { secret } = require('./config').server;
 const User = require('./db/models/user.model');
 const sendMail = require('./mail');
 const cache = require('./cache');
 const registerUser = require('./functions/registerUser');
 const generateToken = require('./functions/generateToken');
+const generateRandomBytes = require('./functions/generateRandomBytes');
 
 class Controller {
   register(req, res) {
@@ -73,7 +73,7 @@ class Controller {
     return res.status(200).json(payload);
   }
 
-  async delete(req, res) {
+  async deleteUser(req, res) {
     // Delete the account
     try {
       await User.destroy({ where: { id: req.user.id } });
@@ -87,7 +87,7 @@ class Controller {
     // Send out an email with a token for password recovery
     try {
       const user = await User.findOne({ where: { email: req.body.email } });
-      const token = randomBytes(20).toString('hex');
+      const token = generateRandomBytes();
       cache.set(token, user.email);
       sendMail(user.email, 'Password Recovery', `${req.hostname}/recover/${token}`);
       return res.status(200).json({ initiatedPasswordRecovery: true });
@@ -118,7 +118,7 @@ class Controller {
 
   changeEmail(req, res) {
     // Send out a token to verify an email change
-    const token = randomBytes(20).toString('hex');
+    const token = generateRandomBytes();
     cache.set(token, JSON.stringify({ currentEmail: req.user.email, newEmail: req.body.email }));
     sendMail(req.body.email, 'Email Change', `${req.hostname}/verify-email-change/${token}`);
     return res.status(200).json({ initiatedEmailChange: true });
