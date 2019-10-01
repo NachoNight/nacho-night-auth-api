@@ -31,7 +31,6 @@ module.exports = (app) => {
     callback: {
       failureRedirect: '/login',
       successRedirect: '/',
-      session: false,
     },
   };
   app.get('/', (_, res) => res.send('NachoNight Authentication API'));
@@ -73,10 +72,10 @@ module.exports = (app) => {
   // OAuth
   app.get('/auth/google', passport.authenticate('google', opts.google));
   app.get('/auth/google/callback', passport.authenticate('google', opts.callback));
-  app.get('/auth/facebook', passport.authenticate('facebook'));
-  app.get('/auth/facebook/callback', passport.authenticate('facebook', opts.callback));
   app.get('/auth/twitter', passport.authenticate('twitter'));
   app.get('/auth/twitter/callback', passport.authenticate('twitter', opts.callback));
   app.get('/auth/discord', passport.authenticate('discord'));
   app.get('/auth/discord/callback', passport.authenticate('discord', opts.callback));
+  // app.get('/auth/facebook', passport.authenticate('facebook'));
+  // app.get('/auth/facebook/callback', passport.authenticate('facebook', opts.callback));
 };

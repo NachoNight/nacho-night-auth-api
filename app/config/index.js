@@ -12,7 +12,7 @@ module.exports = {
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
+    dialect: process.env.DB_DIALECT || 'postgres',
   },
   mail: {
     host: process.env.SMTP_HOSTNAME,
@@ -26,10 +26,6 @@ module.exports = {
       clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,
       clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
     },
-    facebook: {
-      clientID: process.env.FACEBOOK_OAUTH_CLIENT_ID,
-      clientSecret: process.env.FACEBOOK_OAUTH_CLIENT_SECRET,
-    },
     discord: {
       clientID: process.env.DISCORD_OAUTH_CLIENT_ID,
       clientSecret: process.env.DISCORD_OAUTH_CLIENT_SECRET,
@@ -37,6 +33,10 @@ module.exports = {
     twitter: {
       consumerKey: process.env.TWITTER_OAUTH_CONSUMER_KEY,
       consumerSecret: process.env.TWITTER_OAUTH_CONSUMER_SECRET,
+    },
+    facebook: {
+      clientID: process.env.FACEBOOK_OAUTH_CLIENT_ID,
+      clientSecret: process.env.FACEBOOK_OAUTH_CLIENT_SECRET,
     },
   },
 };
