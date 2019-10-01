@@ -1,7 +1,7 @@
-/*
-  The exported function takes in the app itself as the argument
-  and initializes the authentication system.
-*/
+/**
+ * The exported function takes in the app itself as the argument
+ * and initializes the authentication system.
+ */
 const passport = require('passport');
 const refresh = require('passport-oauth2-refresh');
 const authConfig = require('../auth/config');

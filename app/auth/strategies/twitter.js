@@ -18,7 +18,7 @@ module.exports = (passport) => {
           return done(null, user);
         }
         registerUser(
-          profile.id, // FIXME: Find a better solution than this
+          profile.id,
           generateRandomBytes(),
           (err, account) => {
             if (err) return done(err, false);

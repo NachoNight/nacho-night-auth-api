@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 const { Strategy } = require('passport-discord');
 const { clientID, clientSecret } = require('../../config').oauth.discord;
 const User = require('../../db/models/user.model');
@@ -18,7 +17,9 @@ module.exports = (passport, refresh) => {
       try {
         const user = await User.findOne({ where: { clientID: profile.id } });
         if (user) return done(null, user);
-        const emailInUse = await User.findOne({ where: { email: profile.email } });
+        const emailInUse = await User.findOne({
+          where: { email: profile.email },
+        });
         if (emailInUse) return done({ error: 'Email is in use.' }, false);
         registerUser(
           profile.email,

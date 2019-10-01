@@ -14,7 +14,11 @@ class Controller {
     registerUser(req.body.email, req.body.password, (err, user) => {
       if (err) return res.status(500).json(err);
       const token = generateToken({ email: user.email }, '24h');
-      sendMail(user.email, 'Verify your account!', `${req.hostname}/verify-account/${token}`);
+      sendMail(
+        user.email,
+        'Verify your account!',
+        `${req.hostname}/verify-account/${token}`,
+      );
       return res.status(200).json(user);
     });
   }
@@ -24,7 +28,8 @@ class Controller {
     try {
       const user = await User.findOne({ where: { email: req.body.email } });
       const correctPassword = compareSync(req.body.password, user.password);
-      if (!correctPassword) return res.status(403).json({ error: 'Incorrect Password.' });
+      if (!correctPassword)
+        return res.status(403).json({ error: 'Incorrect Password.' });
       const { id, email, verified, banned, clientID, created } = user;
       const payload = {
         id,
@@ -49,10 +54,16 @@ class Controller {
     verify(req.params.token, secret, async (err, decoded) => {
       if (err) return res.status(403).json({ error: 'Invalid token.' });
       const user = await User.findOne({ where: { email: decoded.email } });
-      if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
-      if (user.banned) return res.status(403).json({ error: 'You have been banned.' });
+      if (!user)
+        return res
+          .status(404)
+          .json({ error: 'This email address is not in use.' });
+      if (user.banned)
+        return res.status(403).json({ error: 'You have been banned.' });
       if (user.verified) {
-        return res.status(300).json({ redirect: 'Your account has already been verified.' });
+        return res
+          .status(300)
+          .json({ redirect: 'Your account has already been verified.' });
       }
       await user.update({ verified: true });
       return res.status(200).json(user);
@@ -89,7 +100,11 @@ class Controller {
       const user = await User.findOne({ where: { email: req.body.email } });
       const token = generateRandomBytes();
       cache.set(token, user.email);
-      sendMail(user.email, 'Password Recovery', `${req.hostname}/recover/${token}`);
+      sendMail(
+        user.email,
+        'Password Recovery',
+        `${req.hostname}/recover/${token}`,
+      );
       return res.status(200).json({ initiatedPasswordRecovery: true });
     } catch (error) {
       return res.status(500).json(error);
@@ -100,9 +115,13 @@ class Controller {
     // Recover the password
     try {
       const email = cache.get(req.params.token);
-      if (email === undefined) return res.status(500).json({ error: 'An error has occured.' });
+      if (email === undefined)
+        return res.status(500).json({ error: 'An error has occured.' });
       const user = await User.findOne({ where: { email } });
-      if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
+      if (!user)
+        return res
+          .status(404)
+          .json({ error: 'This email address is not in use.' });
       await user.update({ password: hashSync(req.body.password, 14) });
       cache.del(req.params.token);
       sendMail(
@@ -116,13 +135,29 @@ class Controller {
     }
   }
 
-  changeEmail(req, res) {
+  async changeEmail(req, res) {
     // Send out a token to verify an email change
-    // TODO: Check if the new email is in use.
-    const token = generateRandomBytes();
-    cache.set(token, JSON.stringify({ currentEmail: req.user.email, newEmail: req.body.email }));
-    sendMail(req.body.email, 'Email Change', `${req.hostname}/verify-email-change/${token}`);
-    return res.status(200).json({ initiatedEmailChange: true });
+    try {
+      const user = await User.findOne({ where: { email: req.body.email } });
+      if (user)
+        return res.status(403).json({ error: 'The email address is in use.' });
+      const token = generateRandomBytes();
+      cache.set(
+        token,
+        JSON.stringify({
+          currentEmail: req.user.email,
+          newEmail: req.body.email,
+        }),
+      );
+      sendMail(
+        req.body.email,
+        'Email Change',
+        `${req.hostname}/verify-email-change/${token}`,
+      );
+      return res.status(200).json({ initiatedEmailChange: true });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
   }
 
   async verifyEmailChange(req, res) {
@@ -133,8 +168,12 @@ class Controller {
         return res.status(500).json({ error: 'An error has occured.' });
       }
       const user = await User.findOne({ where: { email: data.currentEmail } });
-      if (!user) return res.status(404).json({ error: 'This email address is not in use.' });
-      if (user.banned) return res.status(403).json({ error: 'You have been banned.' });
+      if (!user)
+        return res
+          .status(404)
+          .json({ error: 'This email address is not in use.' });
+      if (user.banned)
+        return res.status(403).json({ error: 'You have been banned.' });
       await user.update({ email: data.newEmail });
       cache.del(req.params.token);
       return res.status(200).json(user);

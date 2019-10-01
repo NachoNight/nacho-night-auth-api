@@ -1,7 +1,7 @@
-/*
-  This helper function is used
-  for testing the API endpoints.
-*/
+/**
+ * This helper function is used
+ * for testing the API endpoints.
+ */
 const axios = require('axios');
 const { port } = require('../config').server;
 

@@ -1,8 +1,8 @@
-/*
-  The exported function takes in the app itself as the argument
-  and applies all the listed middleware to it.
-  Import and apply the middleware within the function.
-*/
+/**
+ * The exported function takes in the app itself as the argument
+ * and applies all the listed middleware to it.
+ * Import and apply the middleware within the function.
+ */
 const { json, urlencoded } = require('body-parser');
 const session = require('express-session');
 const { secret } = require('../config').server;
