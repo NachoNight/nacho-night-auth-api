@@ -27,7 +27,8 @@ module.exports = async (req, res, next) => {
     path === 'delete' ||
     path === 'current' ||
     path === 'change-password' ||
-    path === 'change-email'
+    path === 'change-email' ||
+    path === 'login'
   ) {
     checkIfAnUserDoesNotExist();
   } else {

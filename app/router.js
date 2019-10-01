@@ -68,16 +68,16 @@ module.exports = (app) => {
   app.get(
     '/auth/google',
     passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }),
-    (_, res) => {
-      res.send('Google OAuth');
-    },
   );
-  // Temp
   app.get(
     '/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
     (_, res) => {
-      res.send('Logged in.');
+      // Temporary
+      res.send('Google OAuth - Logged in!');
+      setTimeout(() => {
+        res.redirect('/');
+      }, 5000);
     },
   );
 };
