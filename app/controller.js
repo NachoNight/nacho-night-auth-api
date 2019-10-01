@@ -118,6 +118,7 @@ class Controller {
 
   changeEmail(req, res) {
     // Send out a token to verify an email change
+    // TODO: Check if the new email is in use.
     const token = generateRandomBytes();
     cache.set(token, JSON.stringify({ currentEmail: req.user.email, newEmail: req.body.email }));
     sendMail(req.body.email, 'Email Change', `${req.hostname}/verify-email-change/${token}`);

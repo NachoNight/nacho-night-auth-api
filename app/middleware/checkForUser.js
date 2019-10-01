@@ -7,7 +7,7 @@ module.exports = async (req, res, next) => {
   try {
     // Stuff
     const path = req.path.split('/')[1];
-    const credentials = determineCredentials(req, path);
+    const credentials = determineCredentials(req);
     const user = await User.findOne({ where: credentials });
     // Functions
     const checkIfAnUserExists = () => {

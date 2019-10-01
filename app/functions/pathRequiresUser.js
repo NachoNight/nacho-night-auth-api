@@ -1,12 +1,12 @@
-/* eslint-disable operator-linebreak */
 module.exports = (path) => {
-  if (
-    path === 'delete' ||
-    path === 'current' ||
-    path === 'change-password' ||
-    path === 'change-email'
-  ) {
-    return true;
-  }
-  return false;
+  const paths = [
+    'login',
+    'delete',
+    'current',
+    'change-password',
+    'change-email',
+    'forgot',
+    'change-password',
+  ];
+  return paths.find((v) => v === path);
 };
