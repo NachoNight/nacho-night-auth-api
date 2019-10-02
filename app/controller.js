@@ -91,14 +91,13 @@ class Controller {
   async addAddress(req, res) {
     // Add an email address to the database.
     try {
-      const email = req.body.email;
+      const { email } = req.body;
       const exists = await Address.findOne({ where: { email } });
-      if(!email) return res.status(500).json({ error: 'No email provided.' });
-      if(exists) return res.status(418).json({ error: 'User already exists.' });
+      if (!email) return res.status(500).json({ error: 'No email provided.' });
+      if (exists) return res.status(418).json({ error: 'User already exists.' });
 
       await Address.create({ email });
       return res.status(200).json({ action: 'created' });
-
     } catch (error) {
       return res.status(500).json(error);
     }
