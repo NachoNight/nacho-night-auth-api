@@ -16,6 +16,9 @@ module.exports = (app) => {
   app.get('/verify-account/:token', (req, res) => {
     controller.verifyAccount(req, res);
   });
+  app.post('/add-address', (req, res) => {
+    controller.addAddress(req, res);
+  });
   app.post('/login', validateInput, (req, res) => {
     controller.login(req, res);
   });
