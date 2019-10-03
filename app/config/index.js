@@ -25,18 +25,17 @@ module.exports = {
     google: {
       clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,
       clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+      callbackURL: '/auth/google/callback',
     },
     discord: {
       clientID: process.env.DISCORD_OAUTH_CLIENT_ID,
       clientSecret: process.env.DISCORD_OAUTH_CLIENT_SECRET,
+      callbackURL: '/auth/discord/callback',
     },
     twitter: {
       consumerKey: process.env.TWITTER_OAUTH_CONSUMER_KEY,
       consumerSecret: process.env.TWITTER_OAUTH_CONSUMER_SECRET,
-    },
-    facebook: {
-      clientID: process.env.FACEBOOK_OAUTH_CLIENT_ID,
-      clientSecret: process.env.FACEBOOK_OAUTH_CLIENT_SECRET,
+      callbackURL: '/auth/twitter/callback',
     },
   },
 };
