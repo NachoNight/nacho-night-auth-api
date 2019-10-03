@@ -14,6 +14,7 @@ const {
   register,
   verifyAccount,
   verifyEmailChange,
+  sendVerification,
 } = require('./controller');
 const validateInput = require('./middleware/validateInput');
 const checkForUser = require('./middleware/checkForUser');
@@ -36,6 +37,12 @@ module.exports = (app) => {
   app.get('/', (_, res) => res.send('NachoNight Authentication API'));
   app.post('/register', checkForUser, validateInput, (req, res) =>
     register(req, res),
+  );
+  app.get(
+    '/send-verification',
+    passport.authenticate('jwt', { session: false }),
+    checkForUser,
+    (req, res) => sendVerification(req, res),
   );
   app.get('/verify-account/:token', (req, res) => verifyAccount(req, res));
   app.post('/login', checkForUser, checkIfBanned, validateInput, (req, res) =>

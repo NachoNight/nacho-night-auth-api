@@ -7,6 +7,7 @@ module.exports = (path) => {
     'change-email',
     'forgot',
     'change-password',
+    'send-verification',
   ];
   return paths.find((v) => v === path);
 };

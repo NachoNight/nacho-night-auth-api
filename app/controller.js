@@ -49,6 +49,25 @@ class Controller {
     }
   }
 
+  async sendVerification(req, res) {
+    try {
+      const user = await User.findOne({ where: { email: req.user.email } });
+      if (user.verified)
+        return res
+          .status(300)
+          .json({ redirect: 'Your account has already been verified.' });
+      const token = generateToken({ email: user.email }, '24h');
+      sendMail(
+        user.email,
+        'Verify your account!',
+        `${req.hostname}/verify-account/${token}`,
+      );
+      return res.status(200).json(user);
+    } catch (error) {
+      return res.status(500).json({ error: 'An error has occured.' });
+    }
+  }
+
   verifyAccount(req, res) {
     // Verify the email verification token
     verify(req.params.token, secret, async (err, decoded) => {
