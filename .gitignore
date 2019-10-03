@@ -2,3 +2,4 @@
 .env
 /app/logs
 yarn.lock
+package-lock.json
