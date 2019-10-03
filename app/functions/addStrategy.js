@@ -36,6 +36,15 @@ const options = {
   },
 };
 
+/**
+ * The way this function works
+ * is by taking in an array of
+ * objects that contain a name key
+ * which is used to target a specific
+ * constructor, in which we pass
+ * corresponding options for the strategy
+ * we want to instantiate.
+ */
 module.exports = (passport, { name }) => {
   let InstanceConstructor;
   switch (name) {
