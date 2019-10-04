@@ -1,5 +1,7 @@
 // Load .env
 require('dotenv').config();
+const { readFileSync } = require('fs');
+const { resolve } = require('path');
 
 module.exports = {
   server: {
@@ -8,12 +10,26 @@ module.exports = {
     secret: process.env.SECRET,
   },
   database: {
-    name: process.env.DB_NAME,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT || 'postgres',
-    port: process.env.DB_PORT || 5432,
+    development: {
+      name: process.env.DB_NAME,
+      username: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      host: process.env.DB_HOST,
+      dialect: process.env.DB_DIALECT || 'postgres',
+      port: process.env.DB_PORT || 5432,
+    },
+    staging: {
+      name: process.env.STAGING_DB_NAME,
+      username: process.env.STAGING_DB_USER,
+      password: process.env.STAGING_DB_PASSWORD,
+      host: process.env.STAGING_DB_HOST,
+      dialect: process.env.STAGING_DB_DIALECT || 'postgres',
+      port: process.env.STAGING_DB_PORT || 5432,
+      dialectOptions: {
+        ssl: true,
+        ca: readFileSync(resolve(__dirname, '../keys', 'certificate.crt')),
+      },
+    },
   },
   mail: {
     host: process.env.SMTP_HOSTNAME,

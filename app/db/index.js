@@ -1,16 +1,17 @@
 const Sequelize = require('sequelize');
-const {
-  name,
-  username,
-  password,
-  host,
-  dialect,
-  port,
-} = require('../config').database;
+const { database, server } = require('../config');
 
-module.exports = new Sequelize(name, username, password, {
-  host,
-  dialect,
-  port,
-  logging: false,
-});
+const connect = () => {
+  const env = server.environment;
+  const { name, username, password, host, dialect, port } = database[env];
+  const config = {
+    host,
+    dialect,
+    port,
+    logging: false,
+  };
+  if (env === 'staging') config.dialectOptions = database[env].dialectOptions;
+  return new Sequelize(name, username, password, config);
+};
+
+module.exports = connect();
