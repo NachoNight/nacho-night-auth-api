@@ -1,16 +1,17 @@
 const Sequelize = require('sequelize');
 const { database, server } = require('../config');
+const { resolve } = require('path');
+const { readFileSync } = require('fs');
 
 const connect = () => {
-  const env = server.environment;
-  const { name, username, password, host, dialect, port } = database[env];
+  const { name, username, password, host, dialect, port } = database;
   const config = {
     host,
     dialect,
     port,
     logging: false,
   };
-  if (env === 'staging') config.dialectOptions = database[env].dialectOptions;
+  if (server.environment === 'staging') {config.dialectOptions = database[env].dialectOptions};
   return new Sequelize(name, username, password, config);
 };
 
