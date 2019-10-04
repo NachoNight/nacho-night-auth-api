@@ -11,7 +11,12 @@ const connect = () => {
     port,
     logging: false,
   };
-  if (server.environment === 'staging') {config.dialectOptions = database[env].dialectOptions};
+  if (server.environment === 'staging') {
+    config.dialectOptions = {
+      ssl: true,
+      ca: readFileSync(resolve(__dirname, '../keys', 'certificate.crt')),
+    };
+  }
   return new Sequelize(name, username, password, config);
 };
 
