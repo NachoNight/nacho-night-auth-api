@@ -4,7 +4,8 @@ const isValid = require('./isValid');
 module.exports = (data) => {
   const errors = {};
   if (!isValid(data.email)) {
-    errors.emailInvalidInput = 'The provided input for the email address is not valid.';
+    errors.emailInvalidInput =
+      'The provided input for the email address is not valid.';
   }
   if (isEmpty(data.email)) {
     errors.emailEmpty = 'Please provide your email address.';

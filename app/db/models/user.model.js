@@ -1,25 +1,30 @@
-const Sequelize = require('sequelize');
+const { STRING, BOOLEAN, DATE, NOW } = require('sequelize');
+const uuid = require('uuid/v4');
 const database = require('../');
 
 const User = database.define('User', {
   email: {
-    type: Sequelize.STRING,
+    type: STRING,
     unique: true,
   },
   password: {
-    type: Sequelize.STRING,
+    type: STRING,
   },
   verified: {
-    type: Sequelize.BOOLEAN,
+    type: BOOLEAN,
     defaultValue: false,
   },
   banned: {
-    type: Sequelize.BOOLEAN,
+    type: BOOLEAN,
     defaultValue: false,
   },
   created: {
-    type: Sequelize.DATE,
-    defaultValue: Sequelize.NOW,
+    type: DATE,
+    defaultValue: NOW,
+  },
+  clientID: {
+    type: STRING,
+    defaultValue: uuid(),
   },
 });
 

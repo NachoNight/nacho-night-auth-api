@@ -1,7 +1,7 @@
-const validateRegistration = require('./functions/register');
-const validateLogin = require('./functions/login');
-const validateForgotPassword = require('./functions/forgot');
-const validatePasswordRecovery = require('./functions/reset');
+const validateRegistration = require('./methods/register');
+const validateLogin = require('./methods/login');
+const validateForgotPassword = require('./methods/forgot');
+const validatePasswordRecovery = require('./methods/reset');
 
 class Validator {
   register(data) {
