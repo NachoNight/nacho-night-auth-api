@@ -2,6 +2,7 @@ const { hashSync, compareSync } = require('bcrypt');
 const { verify } = require('jsonwebtoken');
 const { secret } = require('./config').server;
 const User = require('./db/models/user.model');
+const EmailAddress = require('./db/models/email-address.model');
 const sendMail = require('./mail');
 const cache = require('./cache');
 const registerUser = require('./functions/registerUser');
@@ -212,6 +213,38 @@ class Controller {
         'We want to let you know that your password has been changed.',
       );
       return res.status(200).json(user);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  }
+
+  async addAddress(req, res) {
+    // Add an email address to the database.
+    try {
+      const { email } = req.body;
+      if (!email) return res.status(500).json({ error: 'No email provided.' });
+      const exists = await EmailAddress.findOne({ where: { email } });
+      if (exists)
+        return res.status(403).json({ error: 'User already exists.' });
+
+      await EmailAddress.create({ email });
+      return res.status(200).json({ action: 'created' });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  }
+
+  async removeAddress(req, res) {
+    // Remove an email address from the database
+    try {
+      const { email } = req.body;
+      console.log("Test: ", email);
+      if (!email) return res.status(500).json({ error: 'No email provided.' });
+      const entry = await EmailAddress.findOne({ where: { email } });
+      if (!entry)
+        return res.status(404).json({ error: 'This email is not in use.' });
+      await entry.destroy();
+      return res.status(200).json({ action: 'deleted' });
     } catch (error) {
       return res.status(500).json(error);
     }
