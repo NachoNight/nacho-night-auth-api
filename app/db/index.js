@@ -1,16 +1,23 @@
 const Sequelize = require('sequelize');
-const {
-  name,
-  username,
-  password,
-  host,
-  dialect,
-  port,
-} = require('../config').database;
+const { database, server } = require('../config');
+const { resolve } = require('path');
+const { readFileSync } = require('fs');
 
-module.exports = new Sequelize(name, username, password, {
-  host,
-  dialect,
-  port,
-  logging: false,
-});
+const connect = () => {
+  const { name, username, password, host, dialect, port } = database;
+  const config = {
+    host,
+    dialect,
+    port,
+    logging: false,
+  };
+  if (server.environment === 'staging') {
+    config.dialectOptions = {
+      ssl: true,
+      ca: readFileSync(resolve(__dirname, '../keys', 'certificate.crt')),
+    };
+  }
+  return new Sequelize(name, username, password, config);
+};
+
+module.exports = connect();

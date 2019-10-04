@@ -25,6 +25,7 @@
     "function-paren-newline": "off",
     "curly": "off",
     "nonblock-statement-body-position": "off",
-    "operator-linebreak": "off"
+    "operator-linebreak": "off",
+    "linebreak-style": "off"
   }
 }
