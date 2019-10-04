@@ -13,6 +13,7 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     host: process.env.DB_HOST,
     dialect: process.env.DB_DIALECT || 'postgres',
+    port: process.env.DB_PORT || 5432,
   },
   mail: {
     host: process.env.SMTP_HOSTNAME,
