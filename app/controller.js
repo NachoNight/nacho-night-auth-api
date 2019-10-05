@@ -2,6 +2,7 @@ const { hashSync, compareSync } = require('bcrypt');
 const { verify } = require('jsonwebtoken');
 const { secret } = require('./config').server;
 const User = require('./db/models/user.model');
+const EmailAddress = require('./db/models/email-address.model');
 const sendMail = require('./mail');
 const cache = require('./cache');
 const registerUser = require('./functions/registerUser');
@@ -213,6 +214,34 @@ class Controller {
       );
       return res.status(200).json(user);
     } catch (error) {
+      return res.status(500).json(error);
+    }
+  }
+
+  async addAddress(req, res) {
+    // Add an email address to the database.
+    try {
+      const entry = await EmailAddress.findOne({
+        where: { email: req.body.email },
+      });
+      if (entry)
+        return res
+          .status(403)
+          .json({ error: 'Email already exists within our collection.' });
+      await EmailAddress.create({ email: req.body.email });
+      return res.status(200).json({ action: 'created' });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  }
+
+  async removeAddress(req, res) {
+    // Remove an email from our collection.
+    try {
+      await EmailAddress.destroy({ where: { email: req.body.email } });
+      return res.status(200).json({ action: 'deleted' });
+    } catch (error) {
+      console.log('Error', error);
       return res.status(500).json(error);
     }
   }

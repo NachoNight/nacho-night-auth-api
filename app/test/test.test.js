@@ -5,7 +5,7 @@ const apiTestingUtility = require('../utils/apiTestingUtility');
 let token;
 
 const testingAccount = {
-  email: 'nachonight.testing@gmail.com',
+  email: 'nachonight.testing@protonmail.com',
   password: 'test12345',
   confirmPassword: 'test12345',
 };

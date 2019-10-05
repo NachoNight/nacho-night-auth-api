@@ -15,6 +15,8 @@ const {
   verifyAccount,
   verifyEmailChange,
   sendVerification,
+  addAddress,
+  removeAddress,
 } = require('./controller');
 const validateInput = require('./middleware/validateInput');
 const checkForUser = require('./middleware/checkForUser');
@@ -92,6 +94,11 @@ module.exports = (app) => {
   app.get(
     '/auth/discord/callback',
     passport.authenticate('discord', opts.callback),
+  );
+  // Email address collection
+  app.post('/add-address', validateInput, (req, res) => addAddress(req, res));
+  app.delete('/remove-address', validateInput, (req, res) =>
+    removeAddress(req, res),
   );
   // app.get('/auth/twitter', passport.authenticate('twitter'));
   // app.get('/auth/twitter/callback', passport.authenticate('twitter', opts.callback));

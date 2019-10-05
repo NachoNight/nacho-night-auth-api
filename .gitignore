@@ -1,6 +1,6 @@
 /node_modules
 .env
-.env.backup
+backup.env
 /app/logs
 yarn.lock
 /app/keys
