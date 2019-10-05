@@ -96,8 +96,10 @@ module.exports = (app) => {
     passport.authenticate('discord', opts.callback),
   );
   // Email address collection
-  app.post('/add-address', (req, res) => addAddress(req, res));
-  app.delete('/remove-address', (req, res) => removeAddress(req, res));
+  app.post('/add-address', validateInput, (req, res) => addAddress(req, res));
+  app.delete('/remove-address', validateInput, (req, res) =>
+    removeAddress(req, res),
+  );
   // app.get('/auth/twitter', passport.authenticate('twitter'));
   // app.get('/auth/twitter/callback', passport.authenticate('twitter', opts.callback));
 };

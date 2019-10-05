@@ -64,23 +64,4 @@ describe('Testing Suite', () => {
       expect(res.data).to.include.all.keys('deleted', 'timestamp');
     });
   });
-  describe('Add to email collection', () => {
-    it('should return an object with the action prop', async () => {
-      console.log(testingAccount.email);
-      const res = await apiTestingUtility('post', '/add-address', {
-        email: testingAccount.email,
-      });
-      expect(res.data).to.include.all.keys('action');
-      expect(res.data.action).to.eq('created');
-    });
-  });
-  describe('Remove email from collection', () => {
-    it('should return an object with the action prop', async () => {
-      const res = await apiTestingUtility('delete', '/remove-address', {
-        email: testingAccount.email,
-      });
-      expect(res.data).to.include.all.keys('action');
-      expect(res.data.action).to.eq('deleted');
-    });
-  });
 });

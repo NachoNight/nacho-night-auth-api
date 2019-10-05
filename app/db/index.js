@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
-const { database, server } = require('../config');
 const { resolve } = require('path');
 const { readFileSync } = require('fs');
+const { database, server } = require('../config');
 
 const connect = () => {
   const { name, username, password, host, dialect, port } = database;

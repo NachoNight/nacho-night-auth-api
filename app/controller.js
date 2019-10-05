@@ -221,13 +221,14 @@ class Controller {
   async addAddress(req, res) {
     // Add an email address to the database.
     try {
-      const { email } = req.body;
-      if (!email) return res.status(500).json({ error: 'No email provided.' });
-      const exists = await EmailAddress.findOne({ where: { email } });
-      if (exists)
-        return res.status(403).json({ error: 'User already exists.' });
-
-      await EmailAddress.create({ email });
+      const entry = await EmailAddress.findOne({
+        where: { email: req.body.email },
+      });
+      if (entry)
+        return res
+          .status(403)
+          .json({ error: 'Email already exists within our collection.' });
+      await EmailAddress.create({ email: req.body.email });
       return res.status(200).json({ action: 'created' });
     } catch (error) {
       return res.status(500).json(error);
@@ -235,17 +236,12 @@ class Controller {
   }
 
   async removeAddress(req, res) {
-    // Remove an email address from the database
+    // Remove an email from our collection.
     try {
-      const { email } = req.body;
-      console.log("Test: ", email);
-      if (!email) return res.status(500).json({ error: 'No email provided.' });
-      const entry = await EmailAddress.findOne({ where: { email } });
-      if (!entry)
-        return res.status(404).json({ error: 'This email is not in use.' });
-      await entry.destroy();
+      await EmailAddress.destroy({ where: { email: req.body.email } });
       return res.status(200).json({ action: 'deleted' });
     } catch (error) {
+      console.log('Error', error);
       return res.status(500).json(error);
     }
   }
