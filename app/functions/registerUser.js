@@ -1,4 +1,4 @@
-const { hashSync } = require('bcrypt');
+const { hashSync } = require('bcryptjs');
 const User = require('../db/models/user.model');
 
 module.exports = async (email, password, callback, clientID = false) => {
