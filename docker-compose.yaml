@@ -1,12 +1,14 @@
 version: '3'
 services:
   db:
-    image: 'postgres:11.5-alpine'
+    image: 'postgres:11.5'
     ports:
       - '54321:5432'
-  auth-api:
-    build: './'
-    ports:
-      - '8000:8000'
-    depends_on:
-      - 'db'
+  # TODO: Implement the mail service and yell at gmem to get this running I guess.
+  # mail:
+  # auth-api:
+  #   build: '.'
+  #   ports:
+  #     - '8000:8000'
+  #   depends_on:
+  #     - 'db'
