@@ -1,5 +1,7 @@
 # NachoNight Authentication API
 
+> Documentation: [https://github.com/NachoNight/documentation/blob/master/docs/auth/README.md](https://github.com/NachoNight/documentation/blob/master/docs/auth/README.md)
+
 ---
 
 ### Requirements:
