@@ -10,6 +10,8 @@
 
 - Docker (v.19.03.2)
 
+- Docker-Compose (v.1.24.1)
+
 - Postgres (v.11.5)
 
 ---
@@ -29,6 +31,8 @@
 > You will need to create a .env file in the root directory of the file structure.
 
 > Example file has been provided. `.env.example`
+
+> Make sure to avoid conflicts between the variables set by Docker and the variables set in the file.
 
 ```
 NODE_ENV=
@@ -53,15 +57,3 @@ TWITTER_OAUTH_CONSUMER_SECRET=
 ```
 
 ---
-
-### Todos:
-
-- [ ] Run a Postgres Docker instance
-
-- [ ] Write a docker-compose file to run the app in a dockerized environment
-
-- [ ] Ensure mailhog is included in this future docker-compose file.
-
-- [ ] Change authentication system from JWT to OAuth
-
-- [ ] Refactor the code going against the DRY principle
