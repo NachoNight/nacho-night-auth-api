@@ -245,6 +245,23 @@ class Controller {
       return res.status(500).json(error);
     }
   }
+
+  generateJWTFromOAuth(req, res) {
+    const { id, email, verified, banned, clientID, created } = req.user;
+    const payload = {
+      id,
+      email,
+      verified,
+      banned,
+      clientID,
+      created,
+    };
+    const token = generateToken(payload, 3600);
+    return res.status(200).json({
+      loggedIn: true,
+      token: `Bearer ${token}`,
+    });
+  }
 }
 
 module.exports = new Controller();

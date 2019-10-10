@@ -17,6 +17,7 @@ const {
   sendVerification,
   addAddress,
   removeAddress,
+  generateJWTFromOAuth,
 } = require('./controller');
 const validateInput = require('./middleware/validateInput');
 const checkForUser = require('./middleware/checkForUser');
@@ -33,10 +34,11 @@ module.exports = (app) => {
     },
     callback: {
       failureRedirect: '/login',
-      successRedirect: '/',
     },
   };
-  app.get('/', (_, res) => res.send('NachoNight Authentication API'));
+  app.get('/', (_, res) => {
+    res.send('NachoNight Authentication API');
+  });
   app.post('/register', checkForUser, validateInput, (req, res) =>
     register(req, res),
   );
@@ -89,11 +91,13 @@ module.exports = (app) => {
   app.get(
     '/auth/google/callback',
     passport.authenticate('google', opts.callback),
+    (req, res) => generateJWTFromOAuth(req, res),
   );
   app.get('/auth/discord', passport.authenticate('discord'));
   app.get(
     '/auth/discord/callback',
     passport.authenticate('discord', opts.callback),
+    (req, res) => generateJWTFromOAuth(req, res),
   );
   // Email address collection
   app.post('/add-address', validateInput, (req, res) => addAddress(req, res));
