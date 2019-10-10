@@ -1,13 +1,15 @@
 FROM node:10.16.3-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY . .
+COPY ./package.json .
 
-ENV SERVER_PORT=8000
+COPY ./package-lock.json .
 
 RUN npm install
 
-EXPOSE 8000
+COPY . .
 
-CMD [ "npm", "start" ]
+EXPOSE 3000
+
+CMD npm start

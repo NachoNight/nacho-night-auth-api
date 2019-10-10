@@ -241,7 +241,6 @@ class Controller {
       await EmailAddress.destroy({ where: { email: req.body.email } });
       return res.status(200).json({ action: 'deleted' });
     } catch (error) {
-      console.log('Error', error);
       return res.status(500).json(error);
     }
   }
