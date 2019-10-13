@@ -50,6 +50,22 @@ jobs:
     - run:
         name: Run tests
         command: npm test
+  deploy_staging:
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+    - add_ssh_keys:
+        fingerprints:
+          - "a5:d5:7f:73:c9:c3:6d:6f:82:5d:3e:1c:c9:d6:a9:9c"
+    - checkout
+    - run:
+        name: Deploy new files
+        command: |
+          rsync -e -aR project $TESTING_SSH_HOST:/root/auth_api
+    - run:
+        name: Update Node dependencies on staging
+        command: |
+          ssh $TESTING_SSH_HOST "cd auth_api/; npm i"
 workflows:
   version: 2
   install_and_test:
@@ -58,3 +74,9 @@ workflows:
     - test:
         requires:
         - install
+    - deploy_staging:
+        requires:
+          - test
+        filters:
+          branches:
+            only: master
