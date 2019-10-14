@@ -17,7 +17,7 @@ const connect = () => {
       logging: false,
     },
   };
-  if (server.environment === 'staging' || server.environment === 'production') {
+  if (server.environment !== 'development') {
     config.dialectOptions = {
       ssl: true,
       ca: readFileSync(resolve(__dirname, '../keys', 'certificate.crt')),
