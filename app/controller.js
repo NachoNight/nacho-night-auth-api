@@ -1,4 +1,4 @@
-const { hashSync, compareSync } = require('bcrypt');
+const { hashSync, compareSync } = require('bcryptjs');
 const { verify } = require('jsonwebtoken');
 const { secret } = require('./config').server;
 const User = require('./db/models/user.model');
@@ -241,9 +241,25 @@ class Controller {
       await EmailAddress.destroy({ where: { email: req.body.email } });
       return res.status(200).json({ action: 'deleted' });
     } catch (error) {
-      console.log('Error', error);
       return res.status(500).json(error);
     }
+  }
+
+  generateJWTFromOAuth(req, res) {
+    const { id, email, verified, banned, clientID, created } = req.user;
+    const payload = {
+      id,
+      email,
+      verified,
+      banned,
+      clientID,
+      created,
+    };
+    const token = generateToken(payload, 3600);
+    return res.status(200).json({
+      loggedIn: true,
+      token: `Bearer ${token}`,
+    });
   }
 }
 

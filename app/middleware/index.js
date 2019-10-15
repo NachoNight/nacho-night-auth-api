@@ -5,12 +5,19 @@
  */
 const { json, urlencoded } = require('body-parser');
 const session = require('express-session');
-const { secret } = require('../config').server;
+const { secret, environment } = require('../config').server;
 const logger = require('./logger');
 
 module.exports = (app) => {
+  const sessionConfig = {
+    secret,
+    resave: true,
+    saveUninitialized: true,
+    cookie: { maxAge: 3600 },
+  };
+  if (environment !== 'development') sessionConfig.cookie.secure = true;
   app.use(json());
   app.use(urlencoded({ extended: true }));
-  app.use(session({ secret, resave: true, saveUninitialized: true }));
+  app.use(session(sessionConfig));
   logger(app);
 };

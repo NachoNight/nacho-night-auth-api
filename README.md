@@ -1,5 +1,7 @@
 # NachoNight Authentication API
 
+Documentation: [https://github.com/NachoNight/documentation/blob/master/docs/auth/README.md](https://github.com/NachoNight/documentation/blob/master/docs/auth/README.md)
+
 ---
 
 ### Requirements:
@@ -9,6 +11,8 @@
 - Node.js (v.10.16.3)
 
 - Docker (v.19.03.2)
+
+- Docker-Compose (v.1.24.1)
 
 - Postgres (v.11.5)
 
@@ -30,6 +34,8 @@
 
 > Example file has been provided. `.env.example`
 
+> Make sure to avoid conflicts between the variables set by Docker and the variables set in the file.
+
 ```
 NODE_ENV=
 DB_NAME=
@@ -46,22 +52,10 @@ MAIL_SENDER=
 SECRET=
 GOOGLE_OAUTH_CLIENT_ID=
 GOOGLE_OAUTH_CLIENT_SECRET=
-TWITTER_OAUTH_CONSUMER_KEY=
-TWITTER_OAUTH_CONSUMER_SECRET=
 DISCORD_OAUTH_CLIENT_ID=
 DISCORD_OAUTH_CLIENT_SECRET=
+TWITTER_OAUTH_CONSUMER_KEY=
+TWITTER_OAUTH_CONSUMER_SECRET=
 ```
 
 ---
-
-### Todos:
-
-- [ ] Run a Postgres Docker instance
-
-- [ ] Write a docker-compose file to run the app in a dockerized environment
-
-- [ ] Ensure mailhog is included in this future docker-compose file.
-
-- [ ] Change authentication system from JWT to OAuth
-
-- [ ] Refactor the code going against the DRY principle
