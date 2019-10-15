@@ -3,6 +3,10 @@
  * The controller methods handle the logic
  */
 const passport = require('passport');
+const validateInput = require('./middleware/validateInput');
+const checkForUser = require('./middleware/checkForUser');
+const checkIfBanned = require('./middleware/checkIfBanned');
+
 const {
   changeEmail,
   changePassword,
@@ -19,9 +23,6 @@ const {
   removeAddress,
   generateJWTFromOAuth,
 } = require('./controller');
-const validateInput = require('./middleware/validateInput');
-const checkForUser = require('./middleware/checkForUser');
-const checkIfBanned = require('./middleware/checkIfBanned');
 
 module.exports = (app) => {
   const opts = {
@@ -35,43 +36,33 @@ module.exports = (app) => {
     callback: {
       failureRedirect: '/login',
     },
+    passport: passport.authenticate('jwt', { session: false }),
   };
+
   app.get('/', (_, res) => {
     res.send('NachoNight Authentication API');
   });
   app.post('/register', checkForUser, validateInput, (req, res) =>
     register(req, res),
   );
-  app.get(
-    '/send-verification',
-    passport.authenticate('jwt', { session: false }),
-    checkForUser,
-    (req, res) => sendVerification(req, res),
+  app.get('/send-verification', opts.passport, checkForUser, (req, res) =>
+    sendVerification(req, res),
   );
   app.get('/verify-account/:token', (req, res) => verifyAccount(req, res));
   app.post('/login', checkForUser, checkIfBanned, validateInput, (req, res) =>
     login(req, res),
   );
-  app.get(
-    '/current',
-    passport.authenticate('jwt', { session: false }),
-    checkForUser,
-    checkIfBanned,
-    (req, res) => current(req, res),
+  app.get('/current', opts.passport, checkForUser, checkIfBanned, (req, res) =>
+    current(req, res),
   );
-  app.delete(
-    '/delete',
-    passport.authenticate('jwt', { session: false }),
-    checkForUser,
-    (req, res) => {
-      deleteUser(req, res);
-    },
-  );
+  app.delete('/delete', opts.passport, checkForUser, (req, res) => {
+    deleteUser(req, res);
+  });
   app.patch('/forgot', validateInput, (req, res) => forgot(req, res));
   app.patch('/recover/:token', validateInput, (req, res) => recover(req, res));
   app.put(
     '/change-email',
-    passport.authenticate('jwt', { session: false }),
+    opts.passport,
     checkForUser,
     checkIfBanned,
     (req, res) => changeEmail(req, res),
@@ -81,7 +72,7 @@ module.exports = (app) => {
   );
   app.put(
     '/change-password',
-    passport.authenticate('jwt', { session: false }),
+    opts.passport,
     checkForUser,
     checkIfBanned,
     (req, res) => changePassword(req, res),
@@ -99,11 +90,13 @@ module.exports = (app) => {
     passport.authenticate('discord', opts.callback),
     (req, res) => generateJWTFromOAuth(req, res),
   );
+  /** Disabled OAuth routes:
+   * app.get('/auth/twitter', passport.authenticate('twitter'));
+   * app.get('/auth/twitter/callback', passport.authenticate('twitter', opts.callback));
+   */
   // Email address collection
   app.post('/add-address', validateInput, (req, res) => addAddress(req, res));
   app.delete('/remove-address', validateInput, (req, res) =>
     removeAddress(req, res),
   );
-  // app.get('/auth/twitter', passport.authenticate('twitter'));
-  // app.get('/auth/twitter/callback', passport.authenticate('twitter', opts.callback));
 };

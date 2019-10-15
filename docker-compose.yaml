@@ -5,7 +5,7 @@ services:
     depends_on:
       - postgres
     environment:
-      DB_URL: postgres://user:pass@postgres:5432/db
+      DB_HOST: postgres
       DB_USER: user
       DB_PASSWORD: pass
       DB_NAME: db

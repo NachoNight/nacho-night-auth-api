@@ -1,5 +1,5 @@
 const express = require('express');
-const config = require('./config');
+const { port, environment } = require('./config').server;
 const applyMiddleware = require('./middleware');
 const authSystem = require('./auth');
 const initRouter = require('./router');
@@ -27,12 +27,12 @@ class Server {
   }
 
   start() {
-    this.app.listen(config.server.port, (err) => {
+    this.app.listen(port, (err) => {
       if (err) {
         this.stop(err);
       }
       console.log(
-        `Server is running.\nhttp://localhost:${config.server.port}/\nEnvironment: ${config.server.environment}`,
+        `Server is running.\nhttp://localhost:${port}/\nEnvironment: ${environment}`,
       );
     });
   }
