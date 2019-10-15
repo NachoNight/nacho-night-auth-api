@@ -1,0 +1,11 @@
+/node_modules
+/.github
+/.circleci
+backup.env
+.env.example
+.eslintrc.json
+.gitignore
+.prettierrc
+docker-compose-yaml
+Dockerfile
+README.md
