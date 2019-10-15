@@ -8,16 +8,15 @@ const connect = () => {
   const config = {
     connection: () => {
       if (URL) return URL;
-      return `postgres://${username}:${password}@localhost:5432/${name}`;
+      return `postgres://${username}:${password}@localhost:${port}/${name}`;
     },
     options: {
       host,
       dialect,
-      port,
       logging: false,
     },
   };
-  if (server.environment !== 'development') {
+  if (server.environment === 'staging') {
     config.dialectOptions = {
       ssl: true,
       ca: readFileSync(resolve(__dirname, '../keys', 'certificate.crt')),
