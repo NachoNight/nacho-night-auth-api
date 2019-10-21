@@ -5,6 +5,7 @@
  */
 const { json, urlencoded } = require('body-parser');
 const session = require('express-session');
+const cors = require('cors');
 const { secret, environment } = require('../config').server;
 const logger = require('./logger');
 
@@ -19,5 +20,6 @@ module.exports = (app) => {
   app.use(json());
   app.use(urlencoded({ extended: true }));
   app.use(session(sessionConfig));
+  app.use(cors());
   logger(app);
 };
