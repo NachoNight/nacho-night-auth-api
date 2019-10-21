@@ -6,13 +6,10 @@ const { database, server } = require('../config');
 const connect = () => {
   const { name, username, password, host, dialect, port } = database;
   const config = {
-    connection: () =>
-      `postgres://${username}:${password}@${host}:${port}/${name}`,
-
-    options: {
-      dialect,
-      logging: false,
-    },
+    host,
+    port,
+    dialect,
+    logging: false,
   };
   if (server.environment === 'staging' || server.environment === 'production') {
     config.dialectOptions = {
@@ -20,7 +17,7 @@ const connect = () => {
       ca: readFileSync(resolve(__dirname, '../keys', 'certificate.crt')),
     };
   }
-  return new Sequelize(config.connection(), config.options);
+  return new Sequelize(name, username, password, config);
 };
 
 module.exports = connect();
