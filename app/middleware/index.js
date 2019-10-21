@@ -6,8 +6,8 @@
 const { json, urlencoded } = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
-const { secret, environment } = require('../config').server;
 const logger = require('./logger');
+const { secret, environment } = require('../config').server;
 
 module.exports = (app) => {
   const sessionConfig = {
