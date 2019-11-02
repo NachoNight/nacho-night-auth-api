@@ -245,7 +245,25 @@ class Controller {
     }
   }
 
+  async findUserById(req, res) {
+    /**
+     * This method is to be used
+     * for authorization middleware
+     */
+    const user = await User.findOne({ where: { id: req.params.id } });
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+    return res.status(200).json(user);
+  }
+
   generateJWTFromOAuth(req, res) {
+    /**
+     * This method serves a purpose to
+     * generate JSON web tokens once a
+     * user logs in using OAuth.
+     * This greatly reduces complexity
+     * regarding authorization and
+     * route protection.
+     */
     const { id, email, verified, banned, clientID, created } = req.user;
     const payload = {
       id,

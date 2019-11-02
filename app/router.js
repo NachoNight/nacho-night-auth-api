@@ -22,6 +22,7 @@ const {
   addAddress,
   removeAddress,
   generateJWTFromOAuth,
+  findUserById,
 } = require('./controller');
 
 module.exports = (app) => {
@@ -99,4 +100,6 @@ module.exports = (app) => {
   app.delete('/remove-address', validateInput, (req, res) =>
     removeAddress(req, res),
   );
+  // Find user by ID - Used for authorization middleware for other services
+  app.get('/find/:id', (req, res) => findUserById(req, res));
 };
