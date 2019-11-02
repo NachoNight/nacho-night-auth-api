@@ -31,7 +31,7 @@ class Controller {
       const correctPassword = compareSync(req.body.password, user.password);
       if (!correctPassword)
         return res.status(403).json({ error: 'Incorrect Password.' });
-      const { id, email, verified, banned, clientID, created } = user;
+      const { id, email, verified, banned, clientID, created, type } = user;
       const payload = {
         id,
         email,
@@ -39,6 +39,7 @@ class Controller {
         banned,
         clientID,
         created,
+        type,
       };
       const token = generateToken(payload, 3600);
       return res.status(200).json({
@@ -222,13 +223,13 @@ class Controller {
     // Add an email address to the database.
     try {
       const entry = await EmailAddress.findOne({
-        where: { email: req.body.email },
+        where: { email: req.user.email },
       });
       if (entry)
         return res
           .status(403)
           .json({ error: 'Email already exists within our collection.' });
-      await EmailAddress.create({ email: req.body.email });
+      await EmailAddress.create({ email: req.user.email });
       return res.status(200).json({ action: 'created' });
     } catch (error) {
       return res.status(500).json(error);
@@ -238,7 +239,7 @@ class Controller {
   async removeAddress(req, res) {
     // Remove an email from our collection.
     try {
-      await EmailAddress.destroy({ where: { email: req.body.email } });
+      await EmailAddress.destroy({ where: { email: req.user.email } });
       return res.status(200).json({ action: 'deleted' });
     } catch (error) {
       return res.status(500).json(error);
