@@ -38,10 +38,12 @@ describe('Testing Suite', () => {
       token = login.data.token;
       const res = await apiTestingUtility('get', '/current', null, token);
       expect(res.data).to.include.all.keys(
-        'email',
         'id',
-        'created',
+        'email',
+        'verified',
         'banned',
+        'clientID',
+        'created',
         'type',
       );
     });

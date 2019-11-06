@@ -93,7 +93,7 @@ class Controller {
 
   current(req, res) {
     // Get the data of the user
-    const { id, email, verified, banned, clientID, created } = req.user;
+    const { id, email, verified, banned, clientID, created, type } = req.user;
     const payload = {
       id,
       email,
@@ -101,6 +101,7 @@ class Controller {
       banned,
       clientID,
       created,
+      type,
     };
     return res.status(200).json(payload);
   }
