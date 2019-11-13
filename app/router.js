@@ -22,6 +22,7 @@ const {
   addAddress,
   removeAddress,
   generateJWTFromOAuth,
+  findUserById,
 } = require('./controller');
 
 module.exports = (app) => {
@@ -95,8 +96,12 @@ module.exports = (app) => {
    * app.get('/auth/twitter/callback', passport.authenticate('twitter', opts.callback));
    */
   // Email address collection
-  app.post('/add-address', validateInput, (req, res) => addAddress(req, res));
-  app.delete('/remove-address', validateInput, (req, res) =>
+  app.post('/add-address', opts.passport, validateInput, (req, res) =>
+    addAddress(req, res),
+  );
+  app.delete('/remove-address', opts.passport, validateInput, (req, res) =>
     removeAddress(req, res),
   );
+  // Find user by ID - Used for authorization middleware for other services
+  app.get('/find/:id', (req, res) => findUserById(req, res));
 };

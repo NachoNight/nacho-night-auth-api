@@ -26,6 +26,10 @@ const User = database.define('User', {
     type: STRING,
     defaultValue: uuid(),
   },
+  type: {
+    type: STRING,
+    defaultValue: 'user',
+  },
 });
 
 module.exports = User;

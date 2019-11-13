@@ -31,7 +31,7 @@ class Controller {
       const correctPassword = compareSync(req.body.password, user.password);
       if (!correctPassword)
         return res.status(403).json({ error: 'Incorrect Password.' });
-      const { id, email, verified, banned, clientID, created } = user;
+      const { id, email, verified, banned, clientID, created, type } = user;
       const payload = {
         id,
         email,
@@ -39,6 +39,7 @@ class Controller {
         banned,
         clientID,
         created,
+        type,
       };
       const token = generateToken(payload, 3600);
       return res.status(200).json({
@@ -92,7 +93,7 @@ class Controller {
 
   current(req, res) {
     // Get the data of the user
-    const { id, email, verified, banned, clientID, created } = req.user;
+    const { id, email, verified, banned, clientID, created, type } = req.user;
     const payload = {
       id,
       email,
@@ -100,6 +101,7 @@ class Controller {
       banned,
       clientID,
       created,
+      type,
     };
     return res.status(200).json(payload);
   }
@@ -222,13 +224,13 @@ class Controller {
     // Add an email address to the database.
     try {
       const entry = await EmailAddress.findOne({
-        where: { email: req.body.email },
+        where: { email: req.user.email },
       });
       if (entry)
         return res
           .status(403)
           .json({ error: 'Email already exists within our collection.' });
-      await EmailAddress.create({ email: req.body.email });
+      await EmailAddress.create({ email: req.user.email });
       return res.status(200).json({ action: 'created' });
     } catch (error) {
       return res.status(500).json(error);
@@ -238,14 +240,32 @@ class Controller {
   async removeAddress(req, res) {
     // Remove an email from our collection.
     try {
-      await EmailAddress.destroy({ where: { email: req.body.email } });
+      await EmailAddress.destroy({ where: { email: req.user.email } });
       return res.status(200).json({ action: 'deleted' });
     } catch (error) {
       return res.status(500).json(error);
     }
   }
 
+  async findUserById(req, res) {
+    /**
+     * This method is to be used
+     * for authorization middleware
+     */
+    const user = await User.findOne({ where: { id: req.params.id } });
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+    return res.status(200).json(user);
+  }
+
   generateJWTFromOAuth(req, res) {
+    /**
+     * This method serves a purpose to
+     * generate JSON web tokens once a
+     * user logs in using OAuth.
+     * This greatly reduces complexity
+     * regarding authorization and
+     * route protection.
+     */
     const { id, email, verified, banned, clientID, created } = req.user;
     const payload = {
       id,

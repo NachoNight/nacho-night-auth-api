@@ -22,6 +22,7 @@ describe('Testing Suite', () => {
         'created',
         'verified',
         'banned',
+        'type',
       );
     });
   });
@@ -36,7 +37,15 @@ describe('Testing Suite', () => {
       const login = await apiTestingUtility('post', '/login', testingAccount);
       token = login.data.token;
       const res = await apiTestingUtility('get', '/current', null, token);
-      expect(res.data).to.include.all.keys('email', 'id', 'created', 'banned');
+      expect(res.data).to.include.all.keys(
+        'id',
+        'email',
+        'verified',
+        'banned',
+        'clientID',
+        'created',
+        'type',
+      );
     });
   });
   describe('Change password', () => {
@@ -55,6 +64,7 @@ describe('Testing Suite', () => {
         'created',
         'verified',
         'banned',
+        'type',
       );
     });
   });
